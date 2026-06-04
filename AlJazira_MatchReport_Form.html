@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0E1B3D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Al Jazira · Match Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   AL JAZIRA — MATCH REPORT
+   Designed for mobile, looks great on iPad and desktop too.
+   ============================================================ */
+
+:root {
+  --navy:        #0E1B3D;
+  --navy-mid:    #1A2F5A;
+  --navy-dark:   #050B1F;
+  --gold:        #C9A028;
+  --gold-soft:   #EBC95E;
+  --gold-pale:   #FBF1D0;
+  --red:         #CC1230;
+  --red-dark:    #8F0D1F;
+  --red-pale:    #F5D0D6;
+  --ink:         #0A0E1F;
+  --paper:       #FAFBFC;
+  --mist:        #F0F3F8;
+  --rule:        #D6DCE8;
+  --ghost:       #8A96A8;
+  --label:       #6B7A96;
+
+  --grade-blue:       #1F6FB5;
+  --grade-blue-soft:  #D6E7F4;
+  --grade-green:      #2A8C4C;
+  --grade-green-soft: #D3EBD9;
+  --grade-amber:      #C97A10;
+  --grade-amber-soft: #F8E6CF;
+  --grade-red:        #C9302C;
+  --grade-red-soft:   #F4D3D3;
+
+  --shadow-sm: 0 1px 3px rgba(14, 27, 61, 0.06);
+  --shadow-md: 0 4px 14px rgba(14, 27, 61, 0.08);
+  --shadow-lg: 0 12px 28px rgba(14, 27, 61, 0.14);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --font-display: 'Bebas Neue', 'Arial Black', sans-serif;
+  --font-body: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button { font: inherit; cursor: pointer; border: 0; background: none; }
+input, select, textarea { font: inherit; color: inherit; }
+
+/* ── App container ───────────────────────── */
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+@media (min-width: 600px) {
+  body { background: linear-gradient(135deg, #E8ECF6 0%, #F4F6FA 100%); padding: 20px 0; }
+  .app { border-radius: var(--radius-lg); overflow: hidden; min-height: calc(100vh - 40px); }
+}
+
+/* ── Top bar ─────────────────────────────── */
+.topbar {
+  background: var(--navy);
+  padding: 18px 22px 14px;
+  position: relative;
+  flex-shrink: 0;
+}
+.topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--red) 0%, var(--gold) 50%, var(--red) 100%);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-mark {
+  width: 38px; height: 38px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  color: var(--navy);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(201, 160, 40, 0.4);
+}
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--gold);
+  letter-spacing: 2.5px;
+  line-height: 1;
+}
+.brand-sub {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* ── Progress ────────────────────────────── */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.progress-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--gold-soft));
+  width: 16.67%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+}
+.progress-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ── Section container ───────────────────── */
+.main {
+  flex: 1;
+  padding: 28px 22px 120px;
+  overflow-y: auto;
+}
+.section {
+  display: none;
+  animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section.active { display: block; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* ── Section header ──────────────────────── */
+.section-head {
+  margin-bottom: 24px;
+}
+.section-num {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--red);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+.section-sub {
+  font-size: 13px;
+  color: var(--label);
+  margin-top: 8px;
+  font-style: italic;
+}
+.section-rule {
+  margin-top: 14px;
+  height: 3px;
+  width: 48px;
+  background: var(--gold);
+}
+
+/* ── Form fields ─────────────────────────── */
+.field { margin-bottom: 20px; }
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--label);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.field-label .req { color: var(--red); margin-left: 2px; }
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 14px 14px;
+  background: white;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 160, 40, 0.15);
+}
+.input::placeholder, .textarea::placeholder { color: var(--ghost); font-style: italic; }
+.textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+.select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230E1B3D' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 38px;
+}
+
+/* Two-column field row */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+/* ── Score input ─────────────────────────── */
+.score-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: end;
+}
+.score-vs {
+  font-family: var(--font-display);
+  color: var(--navy);
+  font-size: 28px;
+  padding-bottom: 14px;
+  text-align: center;
+}
+.score-field { text-align: center; }
+.score-field .input {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  padding: 8px;
+  height: 64px;
+}
+
+/* ── Chip selector (Home/Away, Result) ──── */
+.chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.chip {
+  padding: 12px 10px;
+  background: white;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  text-align: center;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+}
+.chip:active { transform: scale(0.97); }
+.chip.selected {
+  background: var(--navy);
+  color: var(--gold);
+  border-color: var(--navy);
+}
+.chip-result.selected[data-value="Win"] { background: var(--grade-green); color: white; border-color: var(--grade-green); }
+.chip-result.selected[data-value="Draw"] { background: var(--grade-amber); color: white; border-color: var(--grade-amber); }
+.chip-result.selected[data-value="Loss"] { background: var(--grade-red); color: white; border-color: var(--grade-red); }
+
+/* ── 4-Colour Grade Selector ─────────────── */
+.grade-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.grade {
+  position: relative;
+  padding: 14px 12px;
+  background: white;
+  border: 2px solid var(--rule);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.grade:active { transform: scale(0.97); }
+.grade-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.grade-text { flex: 1; }
+.grade-label {
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 0.8px;
+  color: var(--navy);
+  line-height: 1;
+}
+.grade-mean {
+  font-size: 10px;
+  color: var(--label);
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+.grade[data-grade="blue"]  .grade-dot { background: var(--grade-blue); }
+.grade[data-grade="green"] .grade-dot { background: var(--grade-green); }
+.grade[data-grade="amber"] .grade-dot { background: var(--grade-amber); }
+.grade[data-grade="red"]   .grade-dot { background: var(--grade-red); }
+
+.grade.selected[data-grade="blue"]  { background: var(--grade-blue-soft);  border-color: var(--grade-blue);  }
+.grade.selected[data-grade="green"] { background: var(--grade-green-soft); border-color: var(--grade-green); }
+.grade.selected[data-grade="amber"] { background: var(--grade-amber-soft); border-color: var(--grade-amber); }
+.grade.selected[data-grade="red"]   { background: var(--grade-red-soft);   border-color: var(--grade-red);   }
+.grade.selected .grade-label { color: var(--navy-dark); font-weight: 900; }
+
+.grade.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 8px; right: 10px;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--navy);
+}
+
+/* Compact grade for player slots */
+.grade-compact {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.grade-compact .grade {
+  flex-direction: column;
+  padding: 10px 4px;
+  gap: 4px;
+  align-items: center;
+}
+.grade-compact .grade-label { font-size: 11px; }
+.grade-compact .grade-mean { display: none; }
+.grade-compact .grade.selected::after { display: none; }
+
+/* ── Player slot ─────────────────────────── */
+.player-slot {
+  background: var(--mist);
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  margin-bottom: 14px;
+  position: relative;
+  border-left: 4px solid var(--gold);
+}
+.player-slot-optional {
+  border-left-color: var(--ghost);
+  background: var(--mist);
+}
+.player-slot-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.player-num {
+  width: 30px; height: 30px;
+  background: var(--navy);
+  color: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.player-slot-optional .player-num { background: var(--ghost); color: white; }
+.player-slot-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--navy);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.player-slot-tag {
+  font-size: 9px;
+  color: var(--label);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Opposition player */
+.opp-slot {
+  background: var(--mist);
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  margin-bottom: 14px;
+  border-left: 4px solid var(--red);
+}
+.opp-slot-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.opp-num-badge {
+  width: 30px; height: 30px;
+  background: var(--red);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Navigation footer ───────────────────── */
+.nav-footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1.5px solid var(--rule);
+  padding: 14px 22px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+@media (min-width: 600px) {
+  .nav-footer {
+    position: sticky;
+    bottom: 0;
+    border-radius: 0;
+  }
+}
+.btn {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn:active { transform: scale(0.97); }
+.btn-back {
+  background: white;
+  color: var(--navy);
+  border: 1.5px solid var(--rule);
+  flex: 0 0 90px;
+}
+.btn-next, .btn-submit {
+  background: var(--red);
+  color: white;
+}
+.btn-next:hover, .btn-submit:hover { background: var(--red-dark); }
+.btn-submit { background: var(--grade-green); }
+.btn-submit:hover { background: #1F6B38; }
+.btn-back:disabled { opacity: 0.4; pointer-events: none; }
+
+/* ── Section card (info panels) ──────────── */
+.info-card {
+  background: linear-gradient(135deg, var(--gold-pale), white);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--navy);
+  line-height: 1.6;
+}
+.info-card-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--red);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+/* ── Success screen ──────────────────────── */
+.success {
+  text-align: center;
+  padding: 40px 20px;
+}
+.success-icon {
+  width: 88px; height: 88px;
+  margin: 0 auto 24px;
+  background: var(--grade-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 44px;
+  font-weight: 900;
+  animation: pulse 1.5s infinite;
+}
+.success-title {
+  font-family: var(--font-display);
+  font-size: 44px;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.success-sub {
+  color: var(--label);
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+.success-summary {
+  background: var(--mist);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+.success-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13px;
+}
+.success-row:last-child { border-bottom: 0; }
+.success-row .lbl { color: var(--label); font-weight: 600; }
+.success-row .val { color: var(--navy); font-weight: 700; text-align: right; max-width: 60%; }
+.btn-restart {
+  background: var(--navy);
+  color: white;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+/* ── Helper: voice tip ──────────────────── */
+.voice-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--mist);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--label);
+  font-style: italic;
+}
+.voice-tip-icon {
+  font-size: 14px;
+  color: var(--red);
+}
+
+/* ── Floating "step X of 6" badge for context ─ */
+.step-tag {
+  display: inline-block;
+  background: var(--navy);
+  color: var(--gold);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* Field divider */
+.fields-divider {
+  border-top: 1px dashed var(--rule);
+  margin: 22px 0 18px;
+  padding-top: 4px;
+}
+
+/* Hide number input spinners */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── HEADER ─────────────────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">AJ</div>
+      <div class="brand-text">
+        <div class="brand-name">AL JAZIRA</div>
+        <div class="brand-sub">Match Report</div>
+      </div>
+    </div>
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">1 / 6</div>
+    </div>
+  </header>
+
+  <!-- ── MAIN FORM ──────────────────────── -->
+  <main class="main">
+
+    <!-- ─────── SECTION 1: MATCH SNAPSHOT ─────── -->
+    <section class="section active" data-section="1">
+      <div class="section-head">
+        <div class="section-num">SECTION 01</div>
+        <h1 class="section-title">MATCH SNAPSHOT</h1>
+        <div class="section-sub">Quick fixture details. About 1 minute.</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Date of Match <span class="req">*</span></label>
+        <input type="date" class="input" id="f_date" required>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label class="field-label">Team <span class="req">*</span></label>
+          <select class="select" id="f_team" required>
+            <option value="">Choose...</option>
+            <option>U10</option><option>U12</option><option>U14</option>
+            <option selected>U16</option><option>U18</option><option>U21</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Competition <span class="req">*</span></label>
+          <select class="select" id="f_comp" required>
+            <option value="">Choose...</option>
+            <option>League</option><option>Cup</option>
+            <option>Friendly</option><option>Tournament</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Opposition <span class="req">*</span></label>
+        <input type="text" class="input" id="f_opp" placeholder="e.g. Al Wahda FC" required>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Home or Away <span class="req">*</span></label>
+        <div class="chips" data-field="venue">
+          <button class="chip" type="button" data-value="Home">HOME</button>
+          <button class="chip" type="button" data-value="Away">AWAY</button>
+          <button class="chip" type="button" data-value="Neutral">NEUTRAL</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Final Score <span class="req">*</span></label>
+        <div class="score-row">
+          <div class="score-field">
+            <label class="field-label" style="margin-bottom: 4px;">Al Jazira</label>
+            <input type="number" class="input" id="f_score_us" min="0" max="20" placeholder="0">
+          </div>
+          <div class="score-vs">–</div>
+          <div class="score-field">
+            <label class="field-label" style="margin-bottom: 4px;">Opposition</label>
+            <input type="number" class="input" id="f_score_them" min="0" max="20" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Result <span class="req">*</span></label>
+        <div class="chips" data-field="result">
+          <button class="chip chip-result" type="button" data-value="Win">WIN</button>
+          <button class="chip chip-result" type="button" data-value="Draw">DRAW</button>
+          <button class="chip chip-result" type="button" data-value="Loss">LOSS</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── SECTION 2: IN POSSESSION ─────── -->
+    <section class="section" data-section="2">
+      <div class="section-head">
+        <div class="section-num">SECTION 02</div>
+        <h1 class="section-title">IN POSSESSION</h1>
+        <div class="section-sub">How we played with the ball. About 2 minutes.</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">Game Model · Al Jazira Way</div>
+        Build · Create · Finish the attack. Grade overall execution today.
+      </div>
+
+      <div class="field">
+        <label class="field-label">Overall Grade <span class="req">*</span></label>
+        <div class="grade-group" data-grade-field="ip_grade">
+          <button class="grade" type="button" data-grade="blue">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">OUTSTANDING</div>
+              <div class="grade-mean">Best today. Model for others.</div>
+            </div>
+          </button>
+          <button class="grade" type="button" data-grade="green">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">GOOD</div>
+              <div class="grade-mean">Met expectations.</div>
+            </div>
+          </button>
+          <button class="grade" type="button" data-grade="amber">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">NEEDS WORK</div>
+              <div class="grade-mean">Below expectations.</div>
+            </div>
+          </button>
+          <button class="grade" type="button" data-grade="red">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">POOR</div>
+              <div class="grade-mean">Significant concerns.</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">What worked? What didn't?</label>
+        <textarea class="textarea" id="f_ip_notes" placeholder="Build phase, chance creation, final third. Voice-to-text on your phone keyboard works great here."></textarea>
+        <div class="voice-tip">
+          <span class="voice-tip-icon">🎤</span>
+          Tap the microphone on your keyboard to dictate. Saves typing time.
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── SECTION 3: OUT OF POSSESSION ─────── -->
+    <section class="section" data-section="3">
+      <div class="section-head">
+        <div class="section-num">SECTION 03</div>
+        <h1 class="section-title">OUT OF POSSESSION</h1>
+        <div class="section-sub">How we played without the ball. About 2 minutes.</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">Game Model · Al Jazira Way</div>
+        Press · Block · Defend the goal. Grade overall execution today.
+      </div>
+
+      <div class="field">
+        <label class="field-label">Overall Grade <span class="req">*</span></label>
+        <div class="grade-group" data-grade-field="oop_grade">
+          <button class="grade" type="button" data-grade="blue">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">OUTSTANDING</div>
+              <div class="grade-mean">Best today. Model for others.</div>
+            </div>
+          </button>
+          <button class="grade" type="button" data-grade="green">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">GOOD</div>
+              <div class="grade-mean">Met expectations.</div>
+            </div>
+          </button>
+          <button class="grade" type="button" data-grade="amber">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">NEEDS WORK</div>
+              <div class="grade-mean">Below expectations.</div>
+            </div>
+          </button>
+          <button class="grade" type="button" data-grade="red">
+            <div class="grade-dot"></div>
+            <div class="grade-text">
+              <div class="grade-label">POOR</div>
+              <div class="grade-mean">Significant concerns.</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Pressing, blocking, defending shape</label>
+        <textarea class="textarea" id="f_oop_notes" placeholder="High press triggers, mid-block discipline, low-block execution. Use voice-to-text for speed."></textarea>
+      </div>
+    </section>
+
+    <!-- ─────── SECTION 4: OUR PLAYERS ─────── -->
+    <section class="section" data-section="4">
+      <div class="section-head">
+        <div class="section-num">SECTION 04</div>
+        <h1 class="section-title">OUR PLAYERS</h1>
+        <div class="section-sub">Up to 5 standout performances — positive or negative. About 4 minutes.</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <!-- Player 1 -->
+      <div class="player-slot">
+        <div class="player-slot-head">
+          <div class="player-num">1</div>
+          <div>
+            <div class="player-slot-title">STAR PLAYER</div>
+            <div class="player-slot-tag">Required</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="p1_name" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label class="field-label">Position</label>
+            <select class="select" id="p1_pos">
+              <option value="">—</option>
+              <option>GK</option><option>CB</option><option>LB</option><option>RB</option>
+              <option>CDM</option><option>CM</option><option>CAM</option>
+              <option>LW</option><option>RW</option><option>ST</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="p1_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player 2 -->
+      <div class="player-slot">
+        <div class="player-slot-head">
+          <div class="player-num">2</div>
+          <div>
+            <div class="player-slot-title">STAR PLAYER</div>
+            <div class="player-slot-tag">Required</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="p2_name" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label class="field-label">Position</label>
+            <select class="select" id="p2_pos">
+              <option value="">—</option>
+              <option>GK</option><option>CB</option><option>LB</option><option>RB</option>
+              <option>CDM</option><option>CM</option><option>CAM</option>
+              <option>LW</option><option>RW</option><option>ST</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="p2_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player 3 -->
+      <div class="player-slot">
+        <div class="player-slot-head">
+          <div class="player-num">3</div>
+          <div>
+            <div class="player-slot-title">STAR PLAYER</div>
+            <div class="player-slot-tag">Required</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="p3_name" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label class="field-label">Position</label>
+            <select class="select" id="p3_pos">
+              <option value="">—</option>
+              <option>GK</option><option>CB</option><option>LB</option><option>RB</option>
+              <option>CDM</option><option>CM</option><option>CAM</option>
+              <option>LW</option><option>RW</option><option>ST</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="p3_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fields-divider"></div>
+
+      <!-- Player 4 (optional) -->
+      <div class="player-slot player-slot-optional">
+        <div class="player-slot-head">
+          <div class="player-num">4</div>
+          <div>
+            <div class="player-slot-title">NOTABLE PLAYER</div>
+            <div class="player-slot-tag">Optional · Skip if not needed</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="p4_name" placeholder="Full name (optional)">
+          </div>
+          <div class="field">
+            <label class="field-label">Position</label>
+            <select class="select" id="p4_pos">
+              <option value="">—</option>
+              <option>GK</option><option>CB</option><option>LB</option><option>RB</option>
+              <option>CDM</option><option>CM</option><option>CAM</option>
+              <option>LW</option><option>RW</option><option>ST</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="p4_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player 5 (optional) -->
+      <div class="player-slot player-slot-optional">
+        <div class="player-slot-head">
+          <div class="player-num">5</div>
+          <div>
+            <div class="player-slot-title">NOTABLE PLAYER</div>
+            <div class="player-slot-tag">Optional · Skip if not needed</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="p5_name" placeholder="Full name (optional)">
+          </div>
+          <div class="field">
+            <label class="field-label">Position</label>
+            <select class="select" id="p5_pos">
+              <option value="">—</option>
+              <option>GK</option><option>CB</option><option>LB</option><option>RB</option>
+              <option>CDM</option><option>CM</option><option>CAM</option>
+              <option>LW</option><option>RW</option><option>ST</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="p5_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── SECTION 5: OPPOSITION ─────── -->
+    <section class="section" data-section="5">
+      <div class="section-head">
+        <div class="section-num">SECTION 05</div>
+        <h1 class="section-title">OPPOSITION</h1>
+        <div class="section-sub">What they were like + their best players. About 2 minutes.</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Opposition Style — How did they play? <span class="req">*</span></label>
+        <textarea class="textarea" id="f_opp_style" placeholder="Formation, key strengths, weaknesses, tactical observations."></textarea>
+      </div>
+
+      <div class="fields-divider"></div>
+
+      <!-- Opp Player 1 -->
+      <div class="opp-slot">
+        <div class="opp-slot-head">
+          <div class="opp-num-badge">⚡</div>
+          <div>
+            <div class="player-slot-title" style="color: var(--red);">STANDOUT THREAT 01</div>
+            <div class="player-slot-tag">Required</div>
+          </div>
+        </div>
+        <div class="row-3 row">
+          <div class="field">
+            <label class="field-label">Shirt #</label>
+            <input type="number" class="input" id="op1_num" min="1" max="99" placeholder="10">
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="field-label">Name (if known)</label>
+            <input type="text" class="input" id="op1_name" placeholder="Or skip">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Threat Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="op1_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opp Player 2 (optional) -->
+      <div class="opp-slot" style="border-left-color: var(--ghost);">
+        <div class="opp-slot-head">
+          <div class="opp-num-badge" style="background: var(--ghost);">⚡</div>
+          <div>
+            <div class="player-slot-title" style="color: var(--ghost);">STANDOUT THREAT 02</div>
+            <div class="player-slot-tag">Optional</div>
+          </div>
+        </div>
+        <div class="row-3 row">
+          <div class="field">
+            <label class="field-label">Shirt #</label>
+            <input type="number" class="input" id="op2_num" min="1" max="99" placeholder="0">
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="op2_name" placeholder="Or skip">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Threat Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="op2_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opp Player 3 (optional) -->
+      <div class="opp-slot" style="border-left-color: var(--ghost);">
+        <div class="opp-slot-head">
+          <div class="opp-num-badge" style="background: var(--ghost);">⚡</div>
+          <div>
+            <div class="player-slot-title" style="color: var(--ghost);">STANDOUT THREAT 03</div>
+            <div class="player-slot-tag">Optional</div>
+          </div>
+        </div>
+        <div class="row-3 row">
+          <div class="field">
+            <label class="field-label">Shirt #</label>
+            <input type="number" class="input" id="op3_num" min="1" max="99" placeholder="0">
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label class="field-label">Name</label>
+            <input type="text" class="input" id="op3_name" placeholder="Or skip">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label class="field-label">Threat Grade</label>
+          <div class="grade-group grade-compact" data-grade-field="op3_grade">
+            <button class="grade" type="button" data-grade="blue"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">BLUE</div></div></button>
+            <button class="grade" type="button" data-grade="green"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">GREEN</div></div></button>
+            <button class="grade" type="button" data-grade="amber"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">AMBER</div></div></button>
+            <button class="grade" type="button" data-grade="red"><div class="grade-dot"></div><div class="grade-text"><div class="grade-label">RED</div></div></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── SECTION 6: FORWARD FOCUS ─────── -->
+    <section class="section" data-section="6">
+      <div class="section-head">
+        <div class="section-num">SECTION 06</div>
+        <h1 class="section-title">FORWARD FOCUS</h1>
+        <div class="section-sub">One action point for next training session. About 1 minute.</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">One thing.  ·  Not a list.</div>
+        Forces clarity. What's the single most important thing to address in the next session? Pick the one move that lifts the team most.
+      </div>
+
+      <div class="field">
+        <label class="field-label">Action Point <span class="req">*</span></label>
+        <textarea class="textarea" id="f_action" placeholder="e.g. Friday session: building out from the back under high press. Triangulation drills with the back four + #6." style="min-height: 140px;"></textarea>
+        <div class="voice-tip">
+          <span class="voice-tip-icon">🎤</span>
+          Voice-to-text recommended. Speak it like you'd brief your assistant.
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────── SUCCESS ─────── -->
+    <section class="section" data-section="success">
+      <div class="success">
+        <div class="success-icon">✓</div>
+        <h1 class="success-title">REPORT SUBMITTED</h1>
+        <p class="success-sub">Your match analysis has been recorded.</p>
+
+        <div class="success-summary" id="successSummary"></div>
+
+        <button class="btn-restart" onclick="resetForm()">Submit Another Match</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── NAVIGATION ──────────────────────── -->
+  <footer class="nav-footer" id="navFooter">
+    <button class="btn btn-back" id="btnBack" onclick="goBack()">← Back</button>
+    <button class="btn btn-next" id="btnNext" onclick="goNext()">Next →</button>
+    <button class="btn btn-submit" id="btnSubmit" onclick="submitForm()" style="display:none;">✓ Submit Report</button>
+  </footer>
+
+</div>
+
+<script>
+// ── State ──────────────────────────────────
+let currentSection = 1;
+const totalSections = 6;
+const formData = { grades: {}, chips: {} };
+
+// Set today's date as default
+document.getElementById('f_date').valueAsDate = new Date();
+
+// ── Section navigation ─────────────────────
+function showSection(num) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  if (num === 'success') {
+    document.querySelector('[data-section="success"]').classList.add('active');
+    document.getElementById('navFooter').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const s = document.querySelector(`[data-section="${num}"]`);
+  if (s) s.classList.add('active');
+
+  // Progress
+  document.getElementById('progressFill').style.width = ((num / totalSections) * 100) + '%';
+  document.getElementById('progressLabel').textContent = `${num} / ${totalSections}`;
+
+  // Buttons
+  document.getElementById('btnBack').disabled = num === 1;
+  if (num === totalSections) {
+    document.getElementById('btnNext').style.display = 'none';
+    document.getElementById('btnSubmit').style.display = 'flex';
+  } else {
+    document.getElementById('btnNext').style.display = 'flex';
+    document.getElementById('btnSubmit').style.display = 'none';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext() {
+  if (currentSection < totalSections) {
+    currentSection++;
+    showSection(currentSection);
+  }
+}
+function goBack() {
+  if (currentSection > 1) {
+    currentSection--;
+    showSection(currentSection);
+  }
+}
+
+// ── Chip selectors ─────────────────────────
+document.querySelectorAll('.chips').forEach(group => {
+  const field = group.dataset.field;
+  group.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      formData.chips[field] = chip.dataset.value;
+    });
+  });
+});
+
+// ── Grade selectors ────────────────────────
+document.querySelectorAll('.grade-group').forEach(group => {
+  const field = group.dataset.gradeField;
+  group.querySelectorAll('.grade').forEach(g => {
+    g.addEventListener('click', () => {
+      group.querySelectorAll('.grade').forEach(x => x.classList.remove('selected'));
+      g.classList.add('selected');
+      formData.grades[field] = g.dataset.grade;
+    });
+  });
+});
+
+// ── Submission ─────────────────────────────
+function gradeLabel(g) {
+  return { blue: '🔵 Outstanding', green: '🟢 Good', amber: '🟡 Needs Work', red: '🔴 Poor' }[g] || '—';
+}
+
+function submitForm() {
+  // Collect everything
+  const data = {
+    date: document.getElementById('f_date').value,
+    team: document.getElementById('f_team').value,
+    competition: document.getElementById('f_comp').value,
+    opposition: document.getElementById('f_opp').value,
+    venue: formData.chips.venue || '',
+    score_us: document.getElementById('f_score_us').value,
+    score_them: document.getElementById('f_score_them').value,
+    result: formData.chips.result || '',
+    ip_grade: gradeLabel(formData.grades.ip_grade),
+    ip_notes: document.getElementById('f_ip_notes').value,
+    oop_grade: gradeLabel(formData.grades.oop_grade),
+    oop_notes: document.getElementById('f_oop_notes').value,
+    players: [
+      { name: document.getElementById('p1_name').value, pos: document.getElementById('p1_pos').value, grade: gradeLabel(formData.grades.p1_grade) },
+      { name: document.getElementById('p2_name').value, pos: document.getElementById('p2_pos').value, grade: gradeLabel(formData.grades.p2_grade) },
+      { name: document.getElementById('p3_name').value, pos: document.getElementById('p3_pos').value, grade: gradeLabel(formData.grades.p3_grade) },
+      { name: document.getElementById('p4_name').value, pos: document.getElementById('p4_pos').value, grade: gradeLabel(formData.grades.p4_grade) },
+      { name: document.getElementById('p5_name').value, pos: document.getElementById('p5_pos').value, grade: gradeLabel(formData.grades.p5_grade) },
+    ].filter(p => p.name),
+    opp_style: document.getElementById('f_opp_style').value,
+    opp_players: [
+      { num: document.getElementById('op1_num').value, name: document.getElementById('op1_name').value, grade: gradeLabel(formData.grades.op1_grade) },
+      { num: document.getElementById('op2_num').value, name: document.getElementById('op2_name').value, grade: gradeLabel(formData.grades.op2_grade) },
+      { num: document.getElementById('op3_num').value, name: document.getElementById('op3_name').value, grade: gradeLabel(formData.grades.op3_grade) },
+    ].filter(p => p.num || p.name),
+    action: document.getElementById('f_action').value,
+    submitted_at: new Date().toISOString(),
+  };
+
+  // Render summary
+  const score = (data.score_us !== '' && data.score_them !== '') ? `${data.score_us} – ${data.score_them}` : '—';
+  const summaryHTML = `
+    <div class="success-row"><span class="lbl">Match</span><span class="val">${data.team || '—'} vs ${data.opposition || '—'}</span></div>
+    <div class="success-row"><span class="lbl">Date</span><span class="val">${data.date || '—'}</span></div>
+    <div class="success-row"><span class="lbl">Score</span><span class="val">${score} (${data.result || '—'})</span></div>
+    <div class="success-row"><span class="lbl">Venue</span><span class="val">${data.venue || '—'}</span></div>
+    <div class="success-row"><span class="lbl">In Possession</span><span class="val">${data.ip_grade}</span></div>
+    <div class="success-row"><span class="lbl">Out of Possession</span><span class="val">${data.oop_grade}</span></div>
+    <div class="success-row"><span class="lbl">Players logged</span><span class="val">${data.players.length} own  +  ${data.opp_players.length} opp</span></div>
+  `;
+  document.getElementById('successSummary').innerHTML = summaryHTML;
+
+  // Log the structured data (open browser console to see it — this is what would go to Excel)
+  console.log('MATCH REPORT SUBMITTED:', data);
+  console.log('JSON for Power Automate / Excel:', JSON.stringify(data, null, 2));
+
+  showSection('success');
+}
+
+function resetForm() {
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'date') el.valueAsDate = new Date();
+    else el.value = '';
+  });
+  document.querySelectorAll('.chip.selected, .grade.selected').forEach(el => el.classList.remove('selected'));
+  formData.chips = {};
+  formData.grades = {};
+  document.getElementById('navFooter').style.display = 'flex';
+  currentSection = 1;
+  showSection(1);
+}
+
+// Init
+showSection(1);
+</script>
+
+</body>
+</html>
