@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0E1B3D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Al Jazira · Match Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://qjajdlylypjhoykvvytp.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqYWpkbHlseXBqaG95a3Z2eXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NjQ0MDYsImV4cCI6MjA5NjE0MDQwNn0.8QinawJr97HiauxY7a4SxnOsOt3XxRsQwLMpxqA6gdo';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+<style>
+:root {
+  --navy:#0E1B3D; --navy2:#1A2F5A; --navy3:#243B6A;
+  --gold:#C9A028; --gold2:#EBC95E; --gold-pale:#FBF1D0;
+  --red:#CC1230; --red2:#8F0D1F;
+  --white:#FFFFFF; --paper:#F6F8FC; --mist:#EEF1F8;
+  --ink:#080E22; --muted:#6B7A96; --rule:#D4DAE8;
+  --blue:#1F6FB5; --blue-lt:#D6E7F4;
+  --green:#2A8C4C; --green-lt:#D3EBD9;
+  --amber:#C97A10; --amber-lt:#F8E6CF;
+  --danger:#C9302C; --danger-lt:#F4D3D3;
+  --grey:#8A96A8; --grey-lt:#E8EBF4;
+  --fh:'Bebas Neue',sans-serif; --fb:'Archivo',sans-serif;
+  --r:10px; --rl:16px;
+  --sh:0 2px 12px rgba(14,27,61,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:var(--fb);background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
+button{font:inherit;cursor:pointer;border:0;background:none}
+input,select,textarea{font:inherit;color:inherit}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--white);display:flex;flex-direction:column;box-shadow:var(--sh)}
+@media(min-width:600px){body{background:#E8ECF6;padding:16px 0}.app{border-radius:var(--rl);min-height:calc(100vh - 32px);overflow:hidden}}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);padding:16px 20px 12px;flex-shrink:0;position:relative}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:var(--navy);font-size:18px;flex-shrink:0}
+.brand-name{font-family:var(--fh);font-size:20px;color:var(--gold);letter-spacing:2px;line-height:1}
+.brand-sub{font-size:10px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+.progress-wrap{margin-top:14px;display:flex;align-items:center;gap:10px}
+.progress-bar{flex:1;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.progress-txt{font-family:var(--fh);font-size:13px;color:var(--gold);letter-spacing:1px;white-space:nowrap}
+
+/* ── PAGE TITLE ── */
+.page-head{padding:24px 20px 0}
+.page-num{font-size:11px;font-weight:700;color:var(--red);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.page-title{font-family:var(--fh);font-size:34px;color:var(--navy);letter-spacing:.5px;line-height:1}
+.page-sub{font-size:13px;color:var(--muted);margin-top:8px;font-style:italic}
+.page-rule{margin:14px 0 0;width:40px;height:3px;background:var(--gold)}
+
+/* ── MAIN SCROLL ── */
+.main{flex:1;padding:20px 20px 110px;overflow-y:auto}
+.section{display:none}.section.active{display:block}
+
+/* ── FIELDS ── */
+.field{margin-bottom:18px}
+.field-label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px}
+.req{color:var(--red);margin-left:2px}
+.input,.select,.textarea{width:100%;padding:13px 14px;background:var(--white);border:1.5px solid var(--rule);border-radius:var(--r);font-size:15px;font-weight:500;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,160,40,.15)}
+.input.error,.select.error,.textarea.error{border-color:var(--danger);box-shadow:0 0 0 3px rgba(201,48,44,.12)}
+.input::placeholder,.textarea::placeholder{color:var(--grey);font-style:italic;font-weight:400}
+.textarea{resize:vertical;min-height:90px;line-height:1.5}
+.select{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%230E1B3D' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.error-msg{font-size:11px;color:var(--danger);font-weight:600;margin-top:5px;display:none}
+.field.has-error .error-msg{display:block}
+
+/* ── ROW LAYOUT ── */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row-3{grid-template-columns:1fr 1fr 1fr}
+
+/* ── SCORE ── */
+.score-row{display:grid;grid-template-columns:1fr 36px 1fr;gap:8px;align-items:end}
+.score-vs{font-family:var(--fh);font-size:26px;color:var(--navy);text-align:center;padding-bottom:12px}
+.score-input{text-align:center;font-family:var(--fh);font-size:30px;height:60px;padding:4px}
+
+/* ── CHIPS (venue / result) ── */
+.chips{display:flex;gap:8px}
+.chip{flex:1;padding:11px 8px;background:var(--white);border:1.5px solid var(--rule);border-radius:var(--r);font-size:13px;font-weight:700;color:var(--navy);text-align:center;letter-spacing:.3px;transition:all .15s}
+.chip:active{transform:scale(.97)}
+.chip.sel{background:var(--navy);color:var(--gold);border-color:var(--navy)}
+.chip.sel-win{background:var(--green);color:var(--white);border-color:var(--green)}
+.chip.sel-draw{background:var(--amber);color:var(--white);border-color:var(--amber)}
+.chip.sel-loss{background:var(--danger);color:var(--white);border-color:var(--danger)}
+.chip.error-chip{border-color:var(--danger)}
+
+/* ── GRADE SELECTOR (10-point) ── */
+.grade-selector{margin-bottom:4px}
+.grade-bands{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.grade-band{padding:10px 4px;border-radius:var(--r);border:2px solid transparent;text-align:center;transition:all .18s;cursor:pointer}
+.grade-band .bn{font-family:var(--fh);font-size:14px;letter-spacing:.5px;line-height:1;display:block}
+.grade-band .br{font-size:10px;font-weight:700;margin-top:3px;display:block;opacity:.75}
+.gb-outstanding{background:var(--blue-lt);border-color:var(--blue)} .gb-outstanding .bn{color:var(--blue)}
+.gb-good{background:var(--green-lt);border-color:var(--green)}       .gb-good .bn{color:var(--green)}
+.gb-needswork{background:var(--amber-lt);border-color:var(--amber)}  .gb-needswork .bn{color:var(--amber)}
+.gb-poor{background:var(--danger-lt);border-color:var(--danger)}     .gb-poor .bn{color:var(--danger)}
+.grade-band.active{transform:scale(1.04);box-shadow:var(--sh)}
+.gb-outstanding.active{background:var(--blue);} .gb-outstanding.active .bn,.gb-outstanding.active .br{color:var(--white)}
+.gb-good.active{background:var(--green);}        .gb-good.active .bn,.gb-good.active .br{color:var(--white)}
+.gb-needswork.active{background:var(--amber);}   .gb-needswork.active .bn,.gb-needswork.active .br{color:var(--white)}
+.gb-poor.active{background:var(--danger);}       .gb-poor.active .bn,.gb-poor.active .br{color:var(--white)}
+.grade-numbers{display:flex;flex-wrap:wrap;gap:8px;min-height:0;transition:all .2s;padding:2px 0}
+.grade-numbers.hidden{display:none}
+.gnum{width:42px;height:42px;border-radius:50%;border:2px solid var(--rule);background:var(--white);font-family:var(--fh);font-size:20px;color:var(--navy);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
+.gnum:active{transform:scale(.9)}
+.gnum.sel-blue{background:var(--blue);border-color:var(--blue);color:var(--white)}
+.gnum.sel-green{background:var(--green);border-color:var(--green);color:var(--white)}
+.gnum.sel-amber{background:var(--amber);border-color:var(--amber);color:var(--white)}
+.gnum.sel-red{background:var(--danger);border-color:var(--danger);color:var(--white)}
+.grade-chosen{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic}
+
+/* ── PLAYER SLOT ── */
+.player-slot{background:var(--mist);border-radius:var(--rl);padding:16px 14px;margin-bottom:14px;border-left:4px solid var(--gold)}
+.player-slot.notable{border-left-color:var(--grey)}
+.player-slot-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.player-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:16px;flex-shrink:0}
+.badge-star{background:var(--navy);color:var(--gold)}
+.badge-notable{background:var(--grey);color:var(--white)}
+.player-slot-title{font-family:var(--fh);font-size:16px;color:var(--navy);letter-spacing:.5px;line-height:1}
+.player-slot-tag{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+
+/* player status pills */
+.status-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.status-pill{padding:6px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1.5px solid transparent;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.sp-squad{background:var(--navy2);color:var(--white);border-color:var(--navy2)}
+.sp-loan{background:var(--blue-lt);color:var(--blue);border-color:var(--blue)}
+.sp-academy{background:var(--green-lt);color:var(--green);border-color:var(--green)}
+.sp-trialist{background:var(--grey-lt);color:var(--grey);border-color:var(--grey)}
+.status-pill.selected{box-shadow:0 0 0 3px rgba(201,160,40,.4);transform:scale(1.05)}
+
+/* ── OPP SLOT ── */
+.opp-slot{background:var(--mist);border-radius:var(--rl);padding:16px 14px;margin-bottom:14px;border-left:4px solid var(--red)}
+.opp-slot.notable-opp{border-left-color:var(--grey)}
+
+/* ── DIVIDER ── */
+.divider{border:0;border-top:1px dashed var(--rule);margin:20px 0}
+
+/* ── NOTES SECTION ── */
+.notes-wrap{margin-top:12px}
+.notes-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
+.voice-tip{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--muted);font-style:italic}
+.voice-icon{font-size:14px}
+
+/* ── REVIEW PAGE ── */
+.review-section{background:var(--white);border:1.5px solid var(--rule);border-radius:var(--rl);margin-bottom:14px;overflow:hidden}
+.review-head{background:var(--navy);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.review-head-title{font-family:var(--fh);font-size:15px;color:var(--gold);letter-spacing:1px}
+.edit-btn{background:rgba(255,255,255,.12);color:var(--white);padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px;border:1px solid rgba(255,255,255,.2)}
+.edit-btn:hover{background:rgba(255,255,255,.2)}
+.review-body{padding:14px 16px}
+.review-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--rule);gap:12px}
+.review-row:last-child{border-bottom:0}
+.rl{font-size:12px;color:var(--muted);font-weight:600;flex-shrink:0}
+.rv{font-size:13px;font-weight:600;color:var(--ink);text-align:right}
+.grade-pill{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700}
+.gp-blue{background:var(--blue-lt);color:var(--blue)}
+.gp-green{background:var(--green-lt);color:var(--green)}
+.gp-amber{background:var(--amber-lt);color:var(--amber)}
+.gp-red{background:var(--danger-lt);color:var(--danger)}
+.gp-grey{background:var(--grey-lt);color:var(--grey)}
+.review-player{background:var(--mist);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.review-player:last-child{margin-bottom:0}
+
+/* ── SUCCESS ── */
+.success-wrap{text-align:center;padding:40px 20px}
+.success-icon{width:84px;height:84px;margin:0 auto 22px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:42px;color:var(--white);font-weight:900;animation:pop .4s cubic-bezier(.4,0,.2,1)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-family:var(--fh);font-size:44px;color:var(--navy);letter-spacing:1px;margin-bottom:6px}
+.success-sub{color:var(--muted);font-size:14px;margin-bottom:28px}
+.success-summary{background:var(--mist);border-radius:var(--rl);padding:18px;text-align:left;margin-bottom:22px}
+.s-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--rule);font-size:13px}
+.s-row:last-child{border-bottom:0}
+.s-lbl{color:var(--muted);font-weight:600}
+.s-val{font-weight:700;color:var(--navy)}
+.btn-restart{background:var(--navy);color:var(--white);padding:14px 28px;border-radius:var(--r);font-weight:700;font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+
+/* ── NAV FOOTER ── */
+.nav-footer{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1.5px solid var(--rule);padding:12px 20px;display:flex;gap:10px;z-index:10}
+@media(min-width:600px){.nav-footer{max-width:520px;left:50%;transform:translateX(-50%)}}
+.btn-back{flex:0 0 80px;padding:13px;border-radius:var(--r);font-size:13px;font-weight:700;background:var(--white);color:var(--navy);border:1.5px solid var(--rule);text-transform:uppercase;transition:all .15s}
+.btn-back:disabled{opacity:.35;pointer-events:none}
+.btn-next,.btn-submit,.btn-confirm{flex:1;padding:13px;border-radius:var(--r);font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;transition:all .15s}
+.btn-next,.btn-confirm{background:var(--red);color:var(--white)}
+.btn-next:active,.btn-confirm:active{background:var(--red2)}
+.btn-submit{background:var(--green);color:var(--white)}
+.btn-submit:active{background:#1F6B38}
+.btn-back:active{background:var(--mist)}
+
+/* ── UTILITY ── */
+.info-card{background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:var(--r);padding:12px 14px;margin-bottom:18px;font-size:13px;color:var(--navy)}
+.info-card-title{font-family:var(--fh);font-size:13px;color:var(--red);letter-spacing:.8px;margin-bottom:4px}
+.optional-tag{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-left:6px;background:var(--mist);padding:2px 6px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">AJ</div>
+    <div>
+      <div class="brand-name">AL JAZIRA</div>
+      <div class="brand-sub">Match Report</div>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:14.28%"></div></div>
+    <div class="progress-txt" id="pTxt">1 / 7</div>
+  </div>
+</header>
+
+<main class="main" id="mainScroll">
+
+<!-- ══════════════════════════════════════════════
+     PAGE 1 — MATCH SNAPSHOT
+══════════════════════════════════════════════ -->
+<section class="section active" data-page="1">
+  <div class="page-head">
+    <div class="page-num">Page 01</div>
+    <h1 class="page-title">Match Snapshot</h1>
+    <div class="page-sub">Quick fixture details — all fields required.</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+
+  <div class="row">
+    <div class="field" id="f_date_w">
+      <label class="field-label">Date <span class="req">*</span></label>
+      <input type="date" class="input" id="f_date">
+      <div class="error-msg">Required</div>
+    </div>
+    <div class="field" id="f_age_w">
+      <label class="field-label">Age Group <span class="req">*</span></label>
+      <select class="select" id="f_age">
+        <option value="">Select…</option>
+        <option>U8</option><option>U9</option><option>U10</option><option>U11</option>
+        <option>U12</option><option>U13</option><option>U14</option><option>U15</option>
+        <option>U17</option><option>U19</option><option>U21</option><option>U23</option>
+      </select>
+      <div class="error-msg">Required</div>
+    </div>
+  </div>
+
+  <div class="field" id="f_comp_w">
+    <label class="field-label">Competition <span class="req">*</span></label>
+    <select class="select" id="f_comp">
+      <option value="">Select…</option>
+      <option>League</option><option>Cup</option>
+      <option>Friendly</option><option>Tournament</option>
+    </select>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field" id="f_opp_w">
+    <label class="field-label">Opposition Full Name <span class="req">*</span></label>
+    <input type="text" class="input" id="f_opp" placeholder="e.g. Al Wahda Football Club">
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field" id="f_coach_w">
+    <label class="field-label">Lead Coach Full Name <span class="req">*</span></label>
+    <input type="text" class="input" id="f_coach" placeholder="Your full name">
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field" id="f_venue_w">
+    <label class="field-label">Venue <span class="req">*</span></label>
+    <div class="chips" id="chips_venue">
+      <button class="chip" type="button" data-val="Home" onclick="selectChip('venue',this)">HOME</button>
+      <button class="chip" type="button" data-val="Away" onclick="selectChip('venue',this)">AWAY</button>
+      <button class="chip" type="button" data-val="Neutral" onclick="selectChip('venue',this)">NEUTRAL</button>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field" id="f_score_w">
+    <label class="field-label">Final Score <span class="req">*</span></label>
+    <div class="score-row">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:4px">AL JAZIRA</div>
+        <input type="number" class="input score-input" id="f_sus" min="0" max="30" placeholder="0">
+      </div>
+      <div class="score-vs">–</div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:4px">OPPOSITION</div>
+        <input type="number" class="input score-input" id="f_sopp" min="0" max="30" placeholder="0">
+      </div>
+    </div>
+    <div class="error-msg">Enter both scores</div>
+  </div>
+
+  <div class="field" id="f_result_w">
+    <label class="field-label">Result <span class="req">*</span></label>
+    <div class="chips" id="chips_result">
+      <button class="chip" type="button" data-val="Win"  onclick="selectResultChip(this,'sel-win')">WIN</button>
+      <button class="chip" type="button" data-val="Draw" onclick="selectResultChip(this,'sel-draw')">DRAW</button>
+      <button class="chip" type="button" data-val="Loss" onclick="selectResultChip(this,'sel-loss')">LOSS</button>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 2 — IN POSSESSION
+══════════════════════════════════════════════ -->
+<section class="section" data-page="2">
+  <div class="page-head">
+    <div class="page-num">Page 02</div>
+    <h1 class="page-title">In Possession</h1>
+    <div class="page-sub">Game model display when we had the ball.</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+
+  <div class="info-card">
+    <div class="info-card-title">Al Jazira Way · Build · Create · Finish</div>
+    Select a grade band then pick the exact score. Outstanding 9–10 · Good 7–8 · Need Work 4–6 · Poor below 4.
+  </div>
+
+  <div class="field" id="f_ip_w">
+    <label class="field-label">Overall Grade <span class="req">*</span></label>
+    <div id="ip_grade_sel" class="grade-selector" data-field="ip"></div>
+    <div class="error-msg">Select a grade and score</div>
+  </div>
+
+  <div class="notes-wrap">
+    <span class="notes-label">Coach Notes <span class="optional-tag">Optional</span></span>
+    <textarea class="textarea" id="f_ip_notes" placeholder="What worked in possession? What needs addressing?"></textarea>
+    <div class="voice-tip"><span class="voice-icon">🎤</span> Tap the mic on your keyboard to dictate notes hands-free.</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 3 — OUT OF POSSESSION
+══════════════════════════════════════════════ -->
+<section class="section" data-page="3">
+  <div class="page-head">
+    <div class="page-num">Page 03</div>
+    <h1 class="page-title">Out of Possession</h1>
+    <div class="page-sub">Game model display when they had the ball.</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+
+  <div class="info-card">
+    <div class="info-card-title">Al Jazira Way · Press · Block · Defend</div>
+    Select a grade band then pick the exact score. Outstanding 9–10 · Good 7–8 · Need Work 4–6 · Poor below 4.
+  </div>
+
+  <div class="field" id="f_oop_w">
+    <label class="field-label">Overall Grade <span class="req">*</span></label>
+    <div id="oop_grade_sel" class="grade-selector" data-field="oop"></div>
+    <div class="error-msg">Select a grade and score</div>
+  </div>
+
+  <div class="notes-wrap">
+    <span class="notes-label">Coach Notes <span class="optional-tag">Optional</span></span>
+    <textarea class="textarea" id="f_oop_notes" placeholder="Pressing triggers, shape, defensive organisation…"></textarea>
+    <div class="voice-tip"><span class="voice-icon">🎤</span> Tap the mic on your keyboard to dictate notes hands-free.</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 4 — OUR PLAYERS
+══════════════════════════════════════════════ -->
+<section class="section" data-page="4">
+  <div class="page-head">
+    <div class="page-num">Page 04</div>
+    <h1 class="page-title">Our Players</h1>
+    <div class="page-sub">3 Star Players (required) + 2 Notable Players (optional).</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+  <div id="player_slots"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 5 — OPPOSITION
+══════════════════════════════════════════════ -->
+<section class="section" data-page="5">
+  <div class="page-head">
+    <div class="page-num">Page 05</div>
+    <h1 class="page-title">Opposition</h1>
+    <div class="page-sub">2 Standout Threats + 1 Notable Threat.</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+
+  <div class="field">
+    <label class="field-label">Opposition Style <span class="req">*</span></label>
+    <textarea class="textarea" id="f_opp_style" placeholder="Formation, key strengths, weaknesses, tactical observations…"></textarea>
+  </div>
+
+  <hr class="divider">
+  <div id="opp_slots"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 6 — FORWARD FOCUS
+══════════════════════════════════════════════ -->
+<section class="section" data-page="6">
+  <div class="page-head">
+    <div class="page-num">Page 06</div>
+    <h1 class="page-title">Forward Focus</h1>
+    <div class="page-sub">One individual action + one team action for the next session.</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+
+  <div class="field" id="f_ind_w">
+    <label class="field-label">Individual Action Point <span class="req">*</span></label>
+    <textarea class="textarea" id="f_focus_ind" placeholder="e.g. Individual IDP focus — dribbling in tight spaces, pressing trigger, receiving on the back foot, 1v1 defending…"></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field" id="f_team_w">
+    <label class="field-label">Team Action Point <span class="req">*</span></label>
+    <textarea class="textarea" id="f_focus_team" placeholder="e.g. Team focus — building out vs high press, mid block shape, creating in the final third, pressing triggers, set piece routine…"></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 7 — REVIEW
+══════════════════════════════════════════════ -->
+<section class="section" data-page="7">
+  <div class="page-head">
+    <div class="page-num">Page 07</div>
+    <h1 class="page-title">Review</h1>
+    <div class="page-sub">Check everything before submitting. Tap Edit to make changes.</div>
+    <div class="page-rule"></div>
+  </div>
+  <div style="height:20px"></div>
+  <div id="review_content"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SUCCESS
+══════════════════════════════════════════════ -->
+<section class="section" data-page="success">
+  <div class="success-wrap">
+    <div class="success-icon">✓</div>
+    <h1 class="success-title">REPORT SUBMITTED</h1>
+    <p class="success-sub">Your match analysis has been recorded.</p>
+    <div class="success-summary" id="successSummary"></div>
+    <button class="btn-restart" onclick="resetForm()">Submit Another Match</button>
+  </div>
+</section>
+
+</main>
+
+<!-- ── NAV FOOTER ── -->
+<footer class="nav-footer" id="navFooter">
+  <button class="btn-back" id="btnBack" onclick="goBack()" disabled>← Back</button>
+  <button class="btn-next" id="btnNext" onclick="goNext()">Next →</button>
+  <button class="btn-confirm" id="btnConfirm" onclick="buildReview()" style="display:none">Review →</button>
+  <button class="btn-submit" id="btnSubmit" onclick="submitForm()" style="display:none">✓ Submit</button>
+</footer>
+</div>
+
+<script>
+// ── STATE ───────────────────────────────────────
+const state = {
+  date:'', age:'', competition:'', opposition:'', coach:'', venue:'', score_us:'', score_them:'', result:'',
+  ip_band:'', ip_value:null, ip_notes:'',
+  oop_band:'', oop_value:null, oop_notes:'',
+  players:[
+    {type:'star',   label:'Star Player 1',    name:'', pos:'', jersey:'', status:'', grade_band:'', grade_value:null, required:true},
+    {type:'star',   label:'Star Player 2',    name:'', pos:'', jersey:'', status:'', grade_band:'', grade_value:null, required:true},
+    {type:'star',   label:'Star Player 3',    name:'', pos:'', jersey:'', status:'', grade_band:'', grade_value:null, required:true},
+    {type:'notable',label:'Notable Player 4', name:'', pos:'', jersey:'', status:'', grade_band:'', grade_value:null, required:false},
+    {type:'notable',label:'Notable Player 5', name:'', pos:'', jersey:'', status:'', grade_band:'', grade_value:null, required:false},
+  ],
+  opp_players:[
+    {type:'standout', label:'Standout Threat 1', jersey:'', name:'', pos:'', grade_band:'', grade_value:null, required:true},
+    {type:'standout', label:'Standout Threat 2', jersey:'', name:'', pos:'', grade_band:'', grade_value:null, required:false},
+    {type:'notable',  label:'Notable Threat',    jersey:'', name:'', pos:'', grade_band:'', grade_value:null, required:false},
+  ],
+  opp_style:'',
+  focus_ind:'', focus_team:''
+};
+
+const POSITIONS = ['GK','CB','LB','RB','LWB','RWB','CDM','CM','CAM','LM','RM','LW','RW','CF','ST'];
+const BANDS = [
+  {id:'outstanding', label:'Outstanding', range:'9–10', nums:[9,10], cls:'gb-outstanding', numCls:'sel-blue'},
+  {id:'good',        label:'Good',        range:'7–8',  nums:[7,8],  cls:'gb-good',        numCls:'sel-green'},
+  {id:'needswork',   label:'Need Work',   range:'4–6',  nums:[4,5,6],cls:'gb-needswork',   numCls:'sel-amber'},
+  {id:'poor',        label:'Poor',        range:'1–3',  nums:[1,2,3],cls:'gb-poor',        numCls:'sel-red'},
+];
+const STATUSES = [
+  {id:'squad',     label:'Squad',    cls:'sp-squad'},
+  {id:'loan',      label:'Loan',     cls:'sp-loan'},
+  {id:'academy',   label:'Academy',  cls:'sp-academy'},
+  {id:'trialist',  label:'Trialist', cls:'sp-trialist'},
+];
+
+let currentPage = 1;
+const TOTAL_PAGES = 7;
+
+// ── INIT ──────────────────────────────────────
+document.getElementById('f_date').valueAsDate = new Date();
+state.date = document.getElementById('f_date').value;
+
+buildGradeSelector('ip_grade_sel', 'ip');
+buildGradeSelector('oop_grade_sel', 'oop');
+buildPlayerSlots();
+buildOppSlots();
+
+// ── GRADE SELECTOR ────────────────────────────
+function buildGradeSelector(containerId, field) {
+  const wrap = document.getElementById(containerId);
+  const bandsHTML = BANDS.map(b => `
+    <button class="grade-band ${b.cls}" type="button"
+      onclick="selectBand('${field}','${b.id}',this)"
+      id="band_${field}_${b.id}">
+      <span class="bn">${b.label}</span>
+      <span class="br">${b.range}</span>
+    </button>`).join('');
+  const numsHTML = `<div class="grade-numbers hidden" id="nums_${field}"></div>`;
+  const chosenHTML = `<div class="grade-chosen" id="chosen_${field}"></div>`;
+  wrap.innerHTML = `<div class="grade-bands">${bandsHTML}</div>${numsHTML}${chosenHTML}`;
+}
+
+function selectBand(field, bandId, btn) {
+  const band = BANDS.find(b => b.id === bandId);
+  BANDS.forEach(b => {
+    const el = document.getElementById(`band_${field}_${b.id}`);
+    if (el) el.classList.remove('active');
+  });
+  btn.classList.add('active');
+  state[field + '_band'] = bandId;
+  state[field + '_value'] = null;
+  const numsWrap = document.getElementById(`nums_${field}`);
+  numsWrap.classList.remove('hidden');
+  numsWrap.innerHTML = band.nums.map(n =>
+    `<button class="gnum" type="button"
+      onclick="selectNum('${field}','${bandId}',${n},this)"
+      id="gnum_${field}_${n}">${n}</button>`
+  ).join('');
+  document.getElementById(`chosen_${field}`).textContent = '';
+  clearError(`f_${field}_w`);
+}
+
+function selectNum(field, bandId, num, btn) {
+  const band = BANDS.find(b => b.id === bandId);
+  document.querySelectorAll(`#nums_${field} .gnum`).forEach(g => {
+    g.classList.remove('sel-blue','sel-green','sel-amber','sel-red');
+  });
+  btn.classList.add(band.numCls);
+  state[field + '_value'] = num;
+  const label = {outstanding:'Outstanding',good:'Good',needswork:'Need Work',poor:'Poor'}[bandId];
+  document.getElementById(`chosen_${field}`).textContent = `Graded: ${label} · ${num}/10`;
+}
+
+// ── CHIPS ─────────────────────────────────────
+function selectChip(field, btn) {
+  document.querySelectorAll(`#chips_${field} .chip`).forEach(c => c.classList.remove('sel'));
+  btn.classList.add('sel');
+  state[field] = btn.dataset.val;
+  clearError(`f_${field}_w`);
+}
+function selectResultChip(btn, selClass) {
+  document.querySelectorAll('#chips_result .chip').forEach(c =>
+    c.classList.remove('sel-win','sel-draw','sel-loss'));
+  btn.classList.add(selClass);
+  state.result = btn.dataset.val;
+  clearError('f_result_w');
+}
+
+// ── PLAYER SLOTS ──────────────────────────────
+function posOptions(selected) {
+  return ['', ...POSITIONS].map(p =>
+    `<option value="${p}" ${p===selected?'selected':''}>${p||'Position…'}</option>`
+  ).join('');
+}
+
+function buildPlayerSlots() {
+  const wrap = document.getElementById('player_slots');
+  wrap.innerHTML = state.players.map((p, i) => {
+    const isStar = p.type === 'star';
+    const badgeCls = isStar ? 'badge-star' : 'badge-notable';
+    const slotCls = isStar ? '' : 'notable';
+    return `
+    <div class="player-slot ${slotCls}" id="pslot_${i}">
+      <div class="player-slot-head">
+        <div class="player-badge ${badgeCls}">${i+1}</div>
+        <div>
+          <div class="player-slot-title">${p.label.toUpperCase()}</div>
+          <div class="player-slot-tag">${p.required ? 'Required' : 'Optional'}</div>
+        </div>
+      </div>
+
+      <div class="field" id="p${i}_name_w">
+        <label class="field-label">Full Name ${p.required?'<span class="req">*</span>':''}</label>
+        <input type="text" class="input" id="p${i}_name"
+          placeholder="Same as UAE Pro League official database"
+          value="${p.name}"
+          oninput="state.players[${i}].name=this.value">
+        <div class="error-msg">Required</div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label class="field-label">Position</label>
+          <select class="select" id="p${i}_pos" onchange="state.players[${i}].pos=this.value">
+            ${posOptions(p.pos)}
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Jersey #</label>
+          <input type="number" class="input" id="p${i}_jersey"
+            min="1" max="99" placeholder="—"
+            value="${p.jersey}"
+            oninput="state.players[${i}].jersey=this.value">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Player Status</label>
+        <div class="status-row">
+          ${STATUSES.map(s => `
+            <button class="status-pill ${s.cls} ${p.status===s.id?'selected':''}"
+              type="button"
+              onclick="selectStatus(${i},'${s.id}',this)">
+              ${s.label}
+            </button>`).join('')}
+        </div>
+      </div>
+
+      <div class="field" id="p${i}_grade_w">
+        <label class="field-label">Performance Grade ${p.required?'<span class="req">*</span>':''}</label>
+        <div id="pgrade_sel_${i}" class="grade-selector" data-field="p${i}"></div>
+        <div class="error-msg">Select a grade and score</div>
+      </div>
+    </div>`;
+  }).join('<hr class="divider">');
+
+  // Build grade selectors for each player
+  state.players.forEach((p, i) => {
+    buildGradeSelector(`pgrade_sel_${i}`, `p${i}`);
+    if (p.grade_band) {
+      restoreGrade(`p${i}`, p.grade_band, p.grade_value);
+    }
+  });
+}
+
+function selectStatus(idx, statusId, btn) {
+  document.querySelectorAll(`#pslot_${idx} .status-pill`).forEach(s => s.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.players[idx].status = statusId;
+}
+
+// ── OPPOSITION SLOTS ──────────────────────────
+function buildOppSlots() {
+  const wrap = document.getElementById('opp_slots');
+  const configs = [
+    {label:'Standout Threat 1', borderColor:'var(--red)',  required:true,  badgeColor:'var(--red)'},
+    {label:'Standout Threat 2', borderColor:'var(--red)',  required:false, badgeColor:'var(--red)'},
+    {label:'Notable Threat',    borderColor:'var(--grey)', required:false, badgeColor:'var(--grey)'},
+  ];
+  wrap.innerHTML = state.opp_players.map((op, i) => {
+    const cfg = configs[i];
+    return `
+    <div class="opp-slot ${op.type==='notable'?'notable-opp':''}" id="opslot_${i}"
+      style="border-left-color:${cfg.borderColor}">
+      <div class="player-slot-head">
+        <div class="player-badge" style="background:${cfg.badgeColor};color:white">${i+1}</div>
+        <div>
+          <div class="player-slot-title" style="color:${cfg.borderColor}">${cfg.label.toUpperCase()}</div>
+          <div class="player-slot-tag">${cfg.required?'Required':'Optional'}</div>
+        </div>
+      </div>
+
+      <div class="row-3 row">
+        <div class="field">
+          <label class="field-label">Shirt #</label>
+          <input type="number" class="input" id="op${i}_jersey"
+            min="1" max="99" placeholder="—"
+            value="${op.jersey}"
+            oninput="state.opp_players[${i}].jersey=this.value">
+        </div>
+        <div class="field" style="grid-column:span 2">
+          <label class="field-label">Name (if known)</label>
+          <input type="text" class="input" id="op${i}_name"
+            placeholder="Optional"
+            value="${op.name}"
+            oninput="state.opp_players[${i}].name=this.value">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Position</label>
+        <select class="select" id="op${i}_pos"
+          onchange="state.opp_players[${i}].pos=this.value">
+          ${posOptions(op.pos)}
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Threat Grade</label>
+        <div id="opgrade_sel_${i}" class="grade-selector" data-field="op${i}"></div>
+      </div>
+    </div>`;
+  }).join('<hr class="divider">');
+
+  state.opp_players.forEach((op, i) => {
+    buildGradeSelector(`opgrade_sel_${i}`, `op${i}`);
+    if (op.grade_band) restoreGrade(`op${i}`, op.grade_band, op.grade_value);
+  });
+}
+
+// Restore grade state after rebuild
+function restoreGrade(field, bandId, value) {
+  const bandBtn = document.getElementById(`band_${field}_${bandId}`);
+  if (bandBtn) selectBand(field, bandId, bandBtn);
+  if (value !== null) {
+    const numBtn = document.getElementById(`gnum_${field}_${value}`);
+    if (numBtn) {
+      const band = BANDS.find(b => b.id === bandId);
+      selectNum(field, bandId, value, numBtn);
+    }
+  }
+}
+
+// Hook up grade states for player/opp grade selectors
+function hookGradeField(domField, stateField, stateSubField) {
+  const origBand = window[`selectBand`];
+}
+
+// Override selectBand and selectNum to also save to player/opp state
+const _origSelectBand = window.selectBand;
+function selectBand(field, bandId, btn) {
+  const band = BANDS.find(b => b.id === bandId);
+  BANDS.forEach(b => {
+    const el = document.getElementById(`band_${field}_${b.id}`);
+    if (el) el.classList.remove('active');
+  });
+  btn.classList.add('active');
+  const numsWrap = document.getElementById(`nums_${field}`);
+  numsWrap.classList.remove('hidden');
+  numsWrap.innerHTML = band.nums.map(n =>
+    `<button class="gnum" type="button"
+      onclick="selectNum('${field}','${bandId}',${n},this)"
+      id="gnum_${field}_${n}">${n}</button>`
+  ).join('');
+  document.getElementById(`chosen_${field}`).textContent = '';
+
+  // Store in correct state location
+  if (field === 'ip')        { state.ip_band = bandId;  state.ip_value = null; }
+  else if (field === 'oop')  { state.oop_band = bandId; state.oop_value = null; }
+  else if (field.startsWith('p') && !field.startsWith('p0') || /^p\d/.test(field)) {
+    const m = field.match(/^p(\d+)$/);
+    if (m) { state.players[parseInt(m[1])].grade_band = bandId; state.players[parseInt(m[1])].grade_value = null; }
+  }
+  else if (/^op\d/.test(field)) {
+    const m = field.match(/^op(\d+)$/);
+    if (m) { state.opp_players[parseInt(m[1])].grade_band = bandId; state.opp_players[parseInt(m[1])].grade_value = null; }
+  }
+  clearError(`f_${field}_w`);
+}
+
+function selectNum(field, bandId, num, btn) {
+  const band = BANDS.find(b => b.id === bandId);
+  document.querySelectorAll(`#nums_${field} .gnum`).forEach(g =>
+    g.classList.remove('sel-blue','sel-green','sel-amber','sel-red'));
+  btn.classList.add(band.numCls);
+  const label = {outstanding:'Outstanding',good:'Good',needswork:'Need Work',poor:'Poor'}[bandId];
+  document.getElementById(`chosen_${field}`).textContent = `Graded: ${label} · ${num}/10`;
+
+  if (field === 'ip')       { state.ip_value = num; clearError('f_ip_w'); }
+  else if (field === 'oop') { state.oop_value = num; clearError('f_oop_w'); }
+  else {
+    const pm = field.match(/^p(\d+)$/);
+    if (pm) { state.players[parseInt(pm[1])].grade_value = num; clearError(`p${pm[1]}_grade_w`); }
+    const om = field.match(/^op(\d+)$/);
+    if (om) { state.opp_players[parseInt(om[1])].grade_value = num; }
+  }
+}
+
+// ── VALIDATION ────────────────────────────────
+function clearError(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('has-error');
+}
+function showError(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('has-error');
+  return false;
+}
+function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function validatePage(page) {
+  let ok = true;
+  if (page === 1) {
+    if (!val('f_date'))  { showError('f_date_w');   ok=false; }
+    if (!val('f_age'))   { showError('f_age_w');    ok=false; }
+    if (!val('f_comp'))  { showError('f_comp_w');   ok=false; }
+    if (!val('f_opp'))   { showError('f_opp_w');    ok=false; }
+    if (!val('f_coach')) { showError('f_coach_w');  ok=false; }
+    if (!state.venue)    { showError('f_venue_w');  ok=false; }
+    if (val('f_sus')==='' || val('f_sopp')==='') { showError('f_score_w'); ok=false; }
+    if (!state.result)   { showError('f_result_w'); ok=false; }
+  }
+  if (page === 2) {
+    if (!state.ip_value) { showError('f_ip_w'); ok=false; }
+  }
+  if (page === 3) {
+    if (!state.oop_value) { showError('f_oop_w'); ok=false; }
+  }
+  if (page === 4) {
+    state.players.forEach((p, i) => {
+      if (p.required && !state.players[i].name) { showError(`p${i}_name_w`); ok=false; }
+      if (p.required && !state.players[i].grade_value) { showError(`p${i}_grade_w`); ok=false; }
+    });
+  }
+  if (page === 6) {
+    if (!val('f_focus_ind'))  { showError('f_ind_w');  ok=false; }
+    if (!val('f_focus_team')) { showError('f_team_w'); ok=false; }
+  }
+  return ok;
+}
+
+// ── NAVIGATION ────────────────────────────────
+function showPage(n) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const sel = n === 'success'
+    ? document.querySelector('[data-page="success"]')
+    : document.querySelector(`[data-page="${n}"]`);
+  if (sel) sel.classList.add('active');
+
+  if (n === 'success') {
+    document.getElementById('navFooter').style.display = 'none';
+    return;
+  }
+  document.getElementById('navFooter').style.display = 'flex';
+  document.getElementById('btnBack').disabled = n === 1;
+  document.getElementById('btnNext').style.display    = (n < 6) ? 'flex' : 'none';
+  document.getElementById('btnConfirm').style.display = (n === 6) ? 'flex' : 'none';
+  document.getElementById('btnSubmit').style.display  = (n === 7) ? 'flex' : 'none';
+
+  const pct = (n / TOTAL_PAGES * 100).toFixed(1) + '%';
+  document.getElementById('pFill').style.width = pct;
+  document.getElementById('pTxt').textContent = `${n} / ${TOTAL_PAGES}`;
+  document.getElementById('mainScroll').scrollTop = 0;
+}
+
+function goNext() {
+  if (!validatePage(currentPage)) {
+    document.getElementById('mainScroll').scrollTop = 0;
+    return;
+  }
+  // Sync text state before moving
+  syncTextFields();
+  currentPage++;
+  showPage(currentPage);
+}
+
+function goBack() {
+  syncTextFields();
+  currentPage--;
+  showPage(currentPage);
+}
+
+function syncTextFields() {
+  const fMap = {f_date:'date', f_age:'age', f_comp:'competition', f_opp:'opposition',
+                f_coach:'coach', f_sus:'score_us', f_sopp:'score_them',
+                f_ip_notes:'ip_notes', f_oop_notes:'oop_notes',
+                f_opp_style:'opp_style', f_focus_ind:'focus_ind', f_focus_team:'focus_team'};
+  Object.entries(fMap).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) state[key] = el.value;
+  });
+  state.players.forEach((p, i) => {
+    const n = document.getElementById(`p${i}_name`);
+    const j = document.getElementById(`p${i}_jersey`);
+    const pos = document.getElementById(`p${i}_pos`);
+    if (n) state.players[i].name = n.value;
+    if (j) state.players[i].jersey = j.value;
+    if (pos) state.players[i].pos = pos.value;
+  });
+  state.opp_players.forEach((op, i) => {
+    const n = document.getElementById(`op${i}_name`);
+    const j = document.getElementById(`op${i}_jersey`);
+    const pos = document.getElementById(`op${i}_pos`);
+    if (n) state.opp_players[i].name = n.value;
+    if (j) state.opp_players[i].jersey = j.value;
+    if (pos) state.opp_players[i].pos = pos.value;
+  });
+}
+
+// ── REVIEW PAGE ───────────────────────────────
+function buildReview() {
+  if (!validatePage(6)) return;
+  syncTextFields();
+
+  const bandLabel = {outstanding:'Outstanding',good:'Good',needswork:'Need Work',poor:'Poor'};
+  const gradeStr = (band, val) => val ? `${bandLabel[band]||'—'} · ${val}/10` : '—';
+  const gClass = (band) => ({outstanding:'gp-blue',good:'gp-green',needswork:'gp-amber',poor:'gp-red'}[band]||'gp-grey');
+
+  const sections = [
+    {
+      title:'Match Snapshot', page:1,
+      rows:[
+        ['Date', state.date || '—'],
+        ['Age Group', state.age || '—'],
+        ['Competition', state.competition || '—'],
+        ['Opposition', state.opposition || '—'],
+        ['Lead Coach', state.coach || '—'],
+        ['Venue', state.venue || '—'],
+        ['Score', (state.score_us !== '' && state.score_them !== '') ? `Al Jazira ${state.score_us} – ${state.score_them} ${state.opposition||'Opp'}` : '—'],
+        ['Result', state.result || '—'],
+      ]
+    },
+    {
+      title:'In Possession', page:2,
+      rows:[
+        ['Grade', `<span class="grade-pill ${gClass(state.ip_band)}">${gradeStr(state.ip_band, state.ip_value)}</span>`],
+        ['Notes', state.ip_notes || '—'],
+      ]
+    },
+    {
+      title:'Out of Possession', page:3,
+      rows:[
+        ['Grade', `<span class="grade-pill ${gClass(state.oop_band)}">${gradeStr(state.oop_band, state.oop_value)}</span>`],
+        ['Notes', state.oop_notes || '—'],
+      ]
+    },
+    {
+      title:'Our Players', page:4,
+      custom: state.players.filter(p => p.name).map(p => `
+        <div class="review-player">
+          <div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:6px">${p.label} — ${p.name} #${p.jersey||'—'} · ${p.pos||'—'}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            ${p.status ? `<span class="status-pill ${STATUSES.find(s=>s.id===p.status)?.cls||''}" style="font-size:10px;padding:3px 8px">${p.status.charAt(0).toUpperCase()+p.status.slice(1)}</span>` : ''}
+            <span class="grade-pill ${gClass(p.grade_band)}">${gradeStr(p.grade_band,p.grade_value)}</span>
+          </div>
+        </div>`).join('') || '<div style="color:var(--muted);font-size:13px;font-style:italic">No players logged.</div>'
+    },
+    {
+      title:'Opposition', page:5,
+      rows:[['Style', state.opp_style||'—']],
+      custom2: state.opp_players.filter(op => op.jersey || op.name).map(op => `
+        <div class="review-player">
+          <div style="font-weight:700;font-size:13px;color:var(--red);margin-bottom:4px">${op.label}</div>
+          <div style="font-size:13px">#${op.jersey||'—'} ${op.name||'Unknown'} · ${op.pos||'—'}</div>
+          <div style="margin-top:4px"><span class="grade-pill ${gClass(op.grade_band)}">${gradeStr(op.grade_band,op.grade_value)}</span></div>
+        </div>`).join('') || ''
+    },
+    {
+      title:'Forward Focus', page:6,
+      rows:[
+        ['Individual', state.focus_ind || '—'],
+        ['Team', state.focus_team || '—'],
+      ]
+    },
+  ];
+
+  document.getElementById('review_content').innerHTML = sections.map(sec => `
+    <div class="review-section">
+      <div class="review-head">
+        <span class="review-head-title">${sec.title.toUpperCase()}</span>
+        <button class="edit-btn" onclick="editSection(${sec.page})">EDIT</button>
+      </div>
+      <div class="review-body">
+        ${(sec.rows||[]).map(([l,v]) => `
+          <div class="review-row">
+            <span class="rl">${l}</span>
+            <span class="rv">${v}</span>
+          </div>`).join('')}
+        ${sec.custom || ''}
+        ${sec.custom2 || ''}
+      </div>
+    </div>`).join('');
+
+  currentPage = 7;
+  showPage(7);
+}
+
+function editSection(page) {
+  currentPage = page;
+  showPage(page);
+  // Restore text field values
+  const fMap = {f_date:'date', f_age:'age', f_comp:'competition', f_opp:'opposition',
+                f_coach:'coach', f_sus:'score_us', f_sopp:'score_them',
+                f_ip_notes:'ip_notes', f_oop_notes:'oop_notes',
+                f_opp_style:'opp_style', f_focus_ind:'focus_ind', f_focus_team:'focus_team'};
+  Object.entries(fMap).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el && state[key] !== undefined) el.value = state[key];
+  });
+  // Restore grade selectors
+  if (page === 2 && state.ip_band) restoreGrade('ip', state.ip_band, state.ip_value);
+  if (page === 3 && state.oop_band) restoreGrade('oop', state.oop_band, state.oop_value);
+  // Restore player/opp grade selectors after DOM settles
+  if (page === 4) {
+    state.players.forEach((p, i) => {
+      if (p.grade_band) restoreGrade(`p${i}`, p.grade_band, p.grade_value);
+    });
+  }
+  if (page === 5) {
+    state.opp_players.forEach((op, i) => {
+      if (op.grade_band) restoreGrade(`op${i}`, op.grade_band, op.grade_value);
+    });
+  }
+  // Update venue/result chips
+  if (page === 1) {
+    if (state.venue) {
+      document.querySelectorAll('#chips_venue .chip').forEach(c => {
+        c.classList.toggle('sel', c.dataset.val === state.venue);
+      });
+    }
+    if (state.result) {
+      const classMap = {Win:'sel-win', Draw:'sel-draw', Loss:'sel-loss'};
+      document.querySelectorAll('#chips_result .chip').forEach(c => {
+        const cl = classMap[c.dataset.val];
+        c.classList.remove('sel-win','sel-draw','sel-loss');
+        if (c.dataset.val === state.result) c.classList.add(cl);
+      });
+    }
+  }
+}
+
+// ── SUBMIT ────────────────────────────────────
+async function submitForm() {
+  document.getElementById('btnSubmit').disabled = true;
+  document.getElementById('btnSubmit').textContent = 'Submitting…';
+
+  const row = {
+    match_date:   state.date,
+    team:         state.age,
+    competition:  state.competition,
+    opposition:   state.opposition,
+    venue:        state.venue,
+    score_us:     parseInt(state.score_us) || 0,
+    score_them:   parseInt(state.score_them) || 0,
+    result:       state.result,
+    ip_grade:     state.ip_band ? `${state.ip_band} (${state.ip_value}/10)` : null,
+    ip_notes:     state.ip_notes || null,
+    oop_grade:    state.oop_band ? `${state.oop_band} (${state.oop_value}/10)` : null,
+    oop_notes:    state.oop_notes || null,
+    p1_name:  state.players[0].name||null, p1_pos: state.players[0].pos||null,
+    p1_grade: state.players[0].grade_band ? `${state.players[0].grade_band} (${state.players[0].grade_value}/10)` : null,
+    p2_name:  state.players[1].name||null, p2_pos: state.players[1].pos||null,
+    p2_grade: state.players[1].grade_band ? `${state.players[1].grade_band} (${state.players[1].grade_value}/10)` : null,
+    p3_name:  state.players[2].name||null, p3_pos: state.players[2].pos||null,
+    p3_grade: state.players[2].grade_band ? `${state.players[2].grade_band} (${state.players[2].grade_value}/10)` : null,
+    p4_name:  state.players[3].name||null, p4_pos: state.players[3].pos||null,
+    p4_grade: state.players[3].grade_band ? `${state.players[3].grade_band} (${state.players[3].grade_value}/10)` : null,
+    p5_name:  state.players[4].name||null, p5_pos: state.players[4].pos||null,
+    p5_grade: state.players[4].grade_band ? `${state.players[4].grade_band} (${state.players[4].grade_value}/10)` : null,
+    opp_style:  state.opp_style || null,
+    op1_num:  parseInt(state.opp_players[0].jersey)||null, op1_name: state.opp_players[0].name||null,
+    op1_grade: state.opp_players[0].grade_band ? `${state.opp_players[0].grade_band} (${state.opp_players[0].grade_value}/10)` : null,
+    op2_num:  parseInt(state.opp_players[1].jersey)||null, op2_name: state.opp_players[1].name||null,
+    op2_grade: state.opp_players[1].grade_band ? `${state.opp_players[1].grade_band} (${state.opp_players[1].grade_value}/10)` : null,
+    op3_num:  parseInt(state.opp_players[2].jersey)||null, op3_name: state.opp_players[2].name||null,
+    op3_grade: state.opp_players[2].grade_band ? `${state.opp_players[2].grade_band} (${state.opp_players[2].grade_value}/10)` : null,
+    action_point: `INDIVIDUAL: ${state.focus_ind} | TEAM: ${state.focus_team}`,
+    submitted_at: new Date().toISOString(),
+  };
+
+  const { error } = await sb.from('match_reports').insert([row]);
+
+  document.getElementById('btnSubmit').disabled = false;
+  document.getElementById('btnSubmit').textContent = '✓ Submit';
+
+  if (error) {
+    alert('Submission failed: ' + error.message);
+    return;
+  }
+
+  // Success screen
+  document.getElementById('successSummary').innerHTML = `
+    <div class="s-row"><span class="s-lbl">Match</span><span class="s-val">${state.age} vs ${state.opposition}</span></div>
+    <div class="s-row"><span class="s-lbl">Date</span><span class="s-val">${state.date}</span></div>
+    <div class="s-row"><span class="s-lbl">Score</span><span class="s-val">AJZ ${state.score_us} – ${state.score_them} ${state.opposition}</span></div>
+    <div class="s-row"><span class="s-lbl">Result</span><span class="s-val">${state.result}</span></div>
+    <div class="s-row"><span class="s-lbl">In Possession</span><span class="s-val">${state.ip_band||'—'} · ${state.ip_value||'—'}/10</span></div>
+    <div class="s-row"><span class="s-lbl">Out of Possession</span><span class="s-val">${state.oop_band||'—'} · ${state.oop_value||'—'}/10</span></div>
+  `;
+  showPage('success');
+}
+
+// ── RESET ─────────────────────────────────────
+function resetForm() {
+  state.date=''; state.age=''; state.competition=''; state.opposition='';
+  state.coach=''; state.venue=''; state.score_us=''; state.score_them=''; state.result='';
+  state.ip_band=''; state.ip_value=null; state.ip_notes='';
+  state.oop_band=''; state.oop_value=null; state.oop_notes='';
+  state.players.forEach(p => Object.assign(p, {name:'',pos:'',jersey:'',status:'',grade_band:'',grade_value:null}));
+  state.opp_players.forEach(op => Object.assign(op, {jersey:'',name:'',pos:'',grade_band:'',grade_value:null}));
+  state.opp_style=''; state.focus_ind=''; state.focus_team='';
+  document.querySelectorAll('.input,.select,.textarea').forEach(el => {
+    if (el.type === 'date') el.valueAsDate = new Date();
+    else el.value = '';
+  });
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel','sel-win','sel-draw','sel-loss'));
+  buildGradeSelector('ip_grade_sel','ip');
+  buildGradeSelector('oop_grade_sel','oop');
+  buildPlayerSlots();
+  buildOppSlots();
+  document.getElementById('navFooter').style.display = 'flex';
+  currentPage = 1;
+  showPage(1);
+}
+
+// Init
+showPage(1);
+</script>
+</body>
+</html>
