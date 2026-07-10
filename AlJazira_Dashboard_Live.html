@@ -3,405 +3,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Al Jazira · Live Dashboard</title>
+<title>Al Jazira FC · Season Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<!-- ── SUPABASE CONFIG ────────────────────────────────────────
-     Same values as form.html — paste your project URL and key
-  ─────────────────────────────────────────────────────────── -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 const SUPABASE_URL = 'https://qjajdlylypjhoykvvytp.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqYWpkbHlseXBqaG95a3Z2eXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NjQ0MDYsImV4cCI6MjA5NjE0MDQwNn0.8QinawJr97HiauxY7a4SxnOsOt3XxRsQwLMpxqA6gdo';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 </script>
-
 <style>
-:root {
-  --navy:   #0E1B3D;
-  --navy2:  #1A2F5A;
-  --gold:   #C9A028;
-  --red:    #CC1230;
-  --white:  #FFFFFF;
-  --bg:     #F0F3F8;
-  --card:   #FFFFFF;
-  --ink:    #0A0E1F;
-  --muted:  #6B7A96;
-  --rule:   #D6DCE8;
-  --blue:   #1F6FB5;  --blue-lt: #D6E7F4;
-  --green:  #2A8C4C;  --green-lt:#D3EBD9;
-  --amber:  #C97A10;  --amber-lt:#F8E6CF;
-  --rg:     #C9302C;  --rg-lt:   #F4D3D3;
-  --f-head: 'Bebas Neue', sans-serif;
-  --f-body: 'Archivo', sans-serif;
-  --shadow: 0 2px 12px rgba(14,27,61,.07);
+:root{
+  --navy:#0E1B3D;--navy2:#1A2F5A;--navy3:#243B6A;
+  --gold:#C9A028;--gold2:#EBC95E;--gold-pale:#FBF1D0;
+  --red:#CC1230;--red2:#8F0D1F;
+  --white:#FFFFFF;--paper:#F0F3F8;--mist:#EEF1F8;
+  --ink:#080E22;--muted:#6B7A96;--rule:#D4DAE8;
+  --blue:#1F6FB5;--blue-lt:#D6E7F4;
+  --green:#2A8C4C;--green-lt:#D3EBD9;
+  --amber:#C97A10;--amber-lt:#F8E6CF;
+  --danger:#C9302C;--danger-lt:#F4D3D3;
+  --grey:#8A96A8;--grey-lt:#E8EBF4;
+  --fh:'Bebas Neue',sans-serif;--fb:'Archivo',sans-serif;
+  --r:10px;--rl:16px;--sh:0 2px 12px rgba(14,27,61,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--f-body);background:var(--bg);color:var(--ink);min-height:100vh}
-
-/* ── Top bar ── */
-.topbar{background:var(--navy);padding:0 32px;display:flex;align-items:center;gap:16px;height:60px;position:relative}
-.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--red),var(--gold),var(--red))}
-.brand-mark{width:36px;height:36px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-head);color:var(--navy);font-size:18px;flex-shrink:0}
-.brand-name{font-family:var(--f-head);font-size:22px;color:var(--gold);letter-spacing:2px}
-.brand-sub{font-size:11px;color:rgba(255,255,255,.5);margin-left:8px;letter-spacing:1px;text-transform:uppercase}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+body{font-family:var(--fb);background:var(--paper);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;background:none}
+select{font:inherit;color:inherit}
+.topbar{background:var(--navy);padding:14px 28px;display:flex;align-items:center;gap:14px;position:relative;flex-wrap:wrap}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
+.brand-logo{width:46px;height:46px;border-radius:50%;background:var(--white);padding:2px;object-fit:contain;flex-shrink:0}
+.brand-name{font-family:var(--fh);font-size:24px;color:var(--white);letter-spacing:1.5px;line-height:.95}
+.brand-name .gold{color:var(--gold)}
+.brand-tagline{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:3px;font-style:italic}
+.report-tag{display:inline-block;margin-top:6px;background:var(--red);color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:4px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .pulse{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.3)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
 .live-txt{font-size:11px;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
-.last-update{font-size:11px;color:rgba(255,255,255,.4)}
-
-/* ── Page layout ── */
-.page{max-width:1280px;margin:0 auto;padding:28px 24px}
-.page-title{font-family:var(--f-head);font-size:38px;color:var(--navy);letter-spacing:1px;margin-bottom:4px}
-.page-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
-
-/* ── KPI strip ── */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-@media(max-width:700px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
-.kpi{background:var(--card);border-radius:12px;padding:20px 20px 16px;box-shadow:var(--shadow);border-top:4px solid var(--navy);position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
-.kpi-val{font-family:var(--f-head);font-size:48px;color:var(--navy);line-height:1;margin-bottom:4px}
-.kpi-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
-.kpi-sub{font-size:12px;color:var(--muted);margin-top:6px}
-.kpi.wins{border-top-color:var(--green)} .kpi.wins .kpi-val{color:var(--green)}
-.kpi.ip{border-top-color:var(--red)}     .kpi.ip .kpi-val{color:var(--red)}
-.kpi.oop{border-top-color:var(--navy2)}  .kpi.oop .kpi-val{color:var(--navy2)}
-
-/* ── Grade pill ── */
-.grade{display:inline-block;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}
-.grade-blue  {background:var(--blue-lt);  color:var(--blue)}
-.grade-green {background:var(--green-lt); color:var(--green)}
-.grade-amber {background:var(--amber-lt); color:var(--amber)}
-.grade-red   {background:var(--rg-lt);    color:var(--rg)}
-.grade-       {background:var(--rule);     color:var(--muted)}
-
-/* ── Result badge ── */
-.result{display:inline-block;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:800;letter-spacing:.5px}
-.result-Win  {background:var(--green-lt);color:var(--green)}
-.result-Draw {background:var(--amber-lt);color:var(--amber)}
-.result-Loss {background:var(--rg-lt);   color:var(--rg)}
-
-/* ── Two-column grid ── */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
-@media(max-width:900px){.two-col{grid-template-columns:1fr}}
-
-/* ── Card ── */
-.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
-.card-head{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.card-title{font-family:var(--f-head);font-size:18px;color:var(--gold);letter-spacing:1.5px}
-.card-body{padding:0}
-
-/* ── Table ── */
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{background:var(--navy2);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 14px;text-align:left;white-space:nowrap}
-.tbl td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--rule);vertical-align:middle}
-.tbl tr:last-child td{border-bottom:0}
-.tbl tr:nth-child(even) td{background:#F9FBFF}
-.tbl tr:hover td{background:#F0F5FF;transition:background .1s}
-@media(max-width:700px){.tbl th:nth-child(n+5),.tbl td:nth-child(n+5){display:none}}
-
-/* ── Player list ── */
-.player-list{padding:14px 20px;display:flex;flex-direction:column;gap:8px}
-.player-row{display:flex;align-items:center;gap:10px}
-.player-avatar{width:32px;height:32px;background:var(--navy);color:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-head);font-size:14px;flex-shrink:0}
-.player-name{font-weight:700;font-size:13px;flex:1}
-.player-pos{font-size:11px;color:var(--muted)}
-.player-avg{font-family:var(--f-head);font-size:22px;color:var(--navy);margin-left:auto}
-.player-status{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px}
-.s-star{background:var(--blue-lt);color:var(--blue)}
-.s-retain{background:var(--green-lt);color:var(--green)}
-.s-review{background:var(--amber-lt);color:var(--amber)}
-.s-release{background:var(--rg-lt);color:var(--rg)}
-
-/* ── Empty state ── */
-.empty{padding:40px;text-align:center;color:var(--muted);font-style:italic}
-
-/* ── New-row flash ── */
-@keyframes flash{0%{background:rgba(201,160,40,.2)}100%{background:transparent}}
-.new-row td{animation:flash .8s ease-out}
-
-/* ── Loading ── */
-.loading{padding:28px;text-align:center;color:var(--muted);font-size:13px}
+.tabs{background:var(--navy2);display:flex;padding:0 28px;overflow-x:auto}
+.tab{padding:14px 22px;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s}
+.tab:hover{color:rgba(255,255,255,.85)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.filters{background:var(--white);border-bottom:1px solid var(--rule);padding:16px 28px;display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;position:sticky;top:0;z-index:20;box-shadow:var(--sh)}
+.filter{display:flex;flex-direction:column;gap:5px}
+.filter label{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
+.filter select{padding:9px 32px 9px 12px;border:1.5px solid var(--rule);border-radius:8px;font-size:14px;font-weight:600;min-width:150px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%230E1B3D' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.filter select:focus{outline:none;border-color:var(--gold)}
+.filter-reset{padding:9px 16px;border:1.5px solid var(--rule);border-radius:8px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+.filter-count{margin-left:auto;font-size:13px;color:var(--muted);font-weight:600;align-self:center}
+.page{max-width:1200px;margin:0 auto;padding:24px 28px 60px}
+.view{display:none}.view.active{display:block}
+.view-title{font-family:var(--fh);font-size:30px;color:var(--navy);letter-spacing:.5px;margin-bottom:4px}
+.view-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:22px}
+.match-card{background:var(--white);border-radius:var(--rl);box-shadow:var(--sh);margin-bottom:20px;overflow:hidden;border:1px solid var(--rule)}
+.mc-head{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mc-result{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:18px;flex-shrink:0;color:#fff}
+.mc-result.Win{background:var(--green)}.mc-result.Draw{background:var(--amber)}.mc-result.Loss{background:var(--danger)}
+.mc-fixture{flex:1;min-width:200px}
+.mc-teams{font-family:var(--fh);font-size:22px;color:#fff;letter-spacing:.5px;line-height:1}
+.mc-teams .gold{color:var(--gold)}
+.mc-meta{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px}
+.mc-score{font-family:var(--fh);font-size:34px;color:var(--gold);letter-spacing:1px}
+.mc-body{padding:18px 20px}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:680px){.mc-grid{grid-template-columns:1fr}.mc-teams{font-size:18px}}
+.phase-box{background:var(--mist);border-radius:var(--r);padding:14px}
+.phase-title{font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grade-pill{display:inline-block;padding:3px 10px;border-radius:14px;font-size:12px;font-weight:800}
+.gp-blue{background:var(--blue-lt);color:var(--blue)}.gp-green{background:var(--green-lt);color:var(--green)}
+.gp-amber{background:var(--amber-lt);color:var(--amber)}.gp-red{background:var(--danger-lt);color:var(--danger)}
+.gp-grey{background:var(--grey-lt);color:var(--grey)}
+.phase-notes{font-size:13px;color:var(--ink);line-height:1.5;margin-top:8px}
+.phase-notes .empty{color:var(--grey);font-style:italic}
+.action-box{background:var(--gold-pale);border:1px solid var(--gold);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.action-label{font-size:10px;font-weight:800;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.action-text{font-size:13px;color:var(--navy)}
+.ptable-wrap{margin-top:16px;overflow-x:auto}
+.ptable-title{font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.ptable{width:100%;border-collapse:collapse;font-size:13px}
+.ptable th{background:var(--navy2);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 10px;text-align:left;white-space:nowrap}
+.ptable td{padding:8px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
+.ptable tr:last-child td{border-bottom:0}
+.ptable tr:nth-child(even) td{background:#F9FBFF}
+.cat-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.cd-blue{background:var(--blue)}.cd-green{background:var(--green)}.cd-amber{background:var(--amber)}.cd-red{background:var(--danger)}
+.star-badge{color:var(--gold);font-weight:800}
+.chart-card{background:var(--white);border-radius:var(--rl);box-shadow:var(--sh);padding:20px;margin-bottom:20px;border:1px solid var(--rule)}
+.chart-title{font-family:var(--fh);font-size:20px;color:var(--navy);letter-spacing:.5px;margin-bottom:2px}
+.chart-sub{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:16px}
+.chart-holder{position:relative;height:320px}
+.two-charts{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:880px){.two-charts{grid-template-columns:1fr}}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+@media(max-width:680px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--white);border-radius:12px;padding:16px 18px;box-shadow:var(--sh);border-top:4px solid var(--navy)}
+.kpi-val{font-family:var(--fh);font-size:38px;color:var(--navy);line-height:1}
+.kpi-label{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.kpi.gold{border-top-color:var(--gold)}.kpi.gold .kpi-val{color:var(--gold)}
+.kpi.green{border-top-color:var(--green)}.kpi.green .kpi-val{color:var(--green)}
+.kpi.red{border-top-color:var(--red)}.kpi.red .kpi-val{color:var(--red)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .big{font-family:var(--fh);font-size:28px;color:var(--navy);margin-bottom:8px}
+.loading{text-align:center;padding:40px;color:var(--muted)}
 </style>
 </head>
 <body>
-
-<!-- ── TOPBAR ─────────────────────────── -->
-<div class="topbar">
-  <div class="brand-mark">AJ</div>
-  <div class="brand-name">AL JAZIRA</div>
-  <div class="brand-sub">· Live Match Report Dashboard</div>
-  <div class="topbar-right">
-    <div class="pulse"></div>
-    <span class="live-txt">Live</span>
-    <span class="last-update" id="lastUpdate">—</span>
+<header class="topbar">
+  <img class="brand-logo" id="hdrLogo" alt="Al Jazira FC">
+  <div>
+    <div class="brand-name">AL JAZIRA <span class="gold">FOOTBALL CLUB</span></div>
+    <div class="brand-tagline">Pride of Abu Dhabi</div>
+    <span class="report-tag">Season Dashboard</span>
   </div>
+  <div class="topbar-right"><div class="pulse"></div><span class="live-txt">Live</span></div>
+</header>
+<nav class="tabs">
+  <button class="tab active" data-tab="overview" onclick="switchTab('overview')">Match Overview</button>
+  <button class="tab" data-tab="analysis" onclick="switchTab('analysis')">Season Analysis</button>
+</nav>
+<div class="filters">
+  <div class="filter"><label>Age Group</label><select id="filterAge" onchange="applyFilters()"><option value="">All Ages</option></select></div>
+  <div class="filter"><label>Matchday</label><select id="filterMatchday" onchange="applyFilters()"><option value="">All Matchdays</option></select></div>
+  <div class="filter"><label>Competition</label><select id="filterComp" onchange="applyFilters()"><option value="">All Competitions</option></select></div>
+  <button class="filter-reset" onclick="resetFilters()">Reset</button>
+  <span class="filter-count" id="filterCount">—</span>
 </div>
-
-<!-- ── PAGE ──────────────────────────── -->
 <div class="page">
-
-  <div class="page-title">Season Dashboard</div>
-  <div class="page-sub" id="pageSub">Loading data…</div>
-
-  <!-- KPI row -->
-  <div class="kpi-row">
-    <div class="kpi">
-      <div class="kpi-val" id="kpiMatches">—</div>
-      <div class="kpi-label">Matches reported</div>
-      <div class="kpi-sub" id="kpiSub">Season to date</div>
+  <div class="view active" id="view-overview">
+    <div class="view-title">Match Overview</div>
+    <div class="view-sub">Full match detail. Use the filters above to narrow by age group, matchday, or competition.</div>
+    <div id="matchList"><div class="loading">Loading matches…</div></div>
+  </div>
+  <div class="view" id="view-analysis">
+    <div class="view-title">Season Analysis</div>
+    <div class="view-sub">Trends and player insight. Reference lines show the matchday average and the season average.</div>
+    <div class="kpi-row" id="analysisKpis"></div>
+    <div class="two-charts">
+      <div class="chart-card">
+        <div class="chart-title">In Possession — by Age Group</div>
+        <div class="chart-sub">Bars = filtered matches · gold dashed = matchday avg · red = season avg</div>
+        <div class="chart-holder"><canvas id="chartIP"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Out of Possession — by Age Group</div>
+        <div class="chart-sub">Bars = filtered matches · gold dashed = matchday avg · red = season avg</div>
+        <div class="chart-holder"><canvas id="chartOOP"></canvas></div>
+      </div>
     </div>
-    <div class="kpi wins">
-      <div class="kpi-val" id="kpiWins">—</div>
-      <div class="kpi-label">Wins</div>
-      <div class="kpi-sub" id="kpiRecord">—</div>
+    <div class="chart-card">
+      <div class="chart-title">Most-Voted Star Players</div>
+      <div class="chart-sub">How often each player is selected as a Star Player (slots 1–3)</div>
+      <div class="chart-holder"><canvas id="chartStars"></canvas></div>
     </div>
-    <div class="kpi ip">
-      <div class="kpi-val" id="kpiIP">—</div>
-      <div class="kpi-label">In Possession avg</div>
-      <div class="kpi-sub">Scale 1–4 · Blue=4</div>
-    </div>
-    <div class="kpi oop">
-      <div class="kpi-val" id="kpiOOP">—</div>
-      <div class="kpi-label">Out of Possession avg</div>
-      <div class="kpi-sub">Scale 1–4 · Blue=4</div>
+    <div class="chart-card">
+      <div class="chart-title">Player Index</div>
+      <div class="chart-sub">Avg performance grade, appearances, and how often the match grade aligns with the player's category tier</div>
+      <div class="ptable-wrap"><table class="ptable" id="playerIndexTable"></table></div>
     </div>
   </div>
-
-  <!-- Match table + Player index -->
-  <div class="two-col">
-
-    <!-- Recent matches -->
-    <div class="card">
-      <div class="card-head">
-        <span class="card-title">RECENT MATCHES</span>
-        <span style="font-size:11px;color:rgba(255,255,255,.5)" id="matchCount">—</span>
-      </div>
-      <div class="card-body">
-        <div id="matchTableWrap" class="loading">Loading matches…</div>
-      </div>
-    </div>
-
-    <!-- Player performance index -->
-    <div class="card">
-      <div class="card-head">
-        <span class="card-title">PLAYER INDEX</span>
-        <span style="font-size:11px;color:rgba(255,255,255,.5)">avg grade /4</span>
-      </div>
-      <div class="card-body">
-        <div class="player-list" id="playerList">
-          <div class="loading">Loading players…</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Full history -->
-  <div class="card" style="margin-bottom:28px">
-    <div class="card-head">
-      <span class="card-title">ALL SUBMISSIONS</span>
-      <span style="font-size:11px;color:rgba(255,255,255,.5)" id="allCount">—</span>
-    </div>
-    <div class="card-body" style="overflow-x:auto">
-      <div id="fullTableWrap" class="loading">Loading…</div>
-    </div>
-  </div>
-
 </div>
-
-<!-- ── SCRIPTS ────────────────────────── -->
 <script>
-const G_SCORE = { '🔵 Outstanding': 4, '🟢 Good': 3, '🟡 Needs Work': 2, '🔴 Poor': 1 };
-const G_CLASS = {
-  '🔵 Outstanding': 'blue', '🟢 Good': 'green',
-  '🟡 Needs Work': 'amber', '🔴 Poor': 'red',
-};
-function gradePill(g) {
-  const cls = G_CLASS[g] || '';
-  return g ? `<span class="grade grade-${cls}">${g}</span>` : '<span class="grade grade-">—</span>';
-}
-function resultBadge(r) {
-  return r ? `<span class="result result-${r}">${r}</span>` : '—';
-}
-function avg(arr) {
-  const valid = arr.filter(x => x > 0);
-  if (!valid.length) return null;
-  return (valid.reduce((a, b) => a + b, 0) / valid.length).toFixed(2);
-}
-function statusTag(a) {
-  if (a === null) return '';
-  const n = parseFloat(a);
-  if (n >= 3.5) return '<span class="player-status s-star">ALL-STAR</span>';
-  if (n >= 2.5) return '<span class="player-status s-retain">RETAIN</span>';
-  if (n >= 1.5) return '<span class="player-status s-review">REVIEW</span>';
-  return '<span class="player-status s-release">RELEASE</span>';
-}
-
-let allRows = [];
-
-function gradeScore(g) { return G_SCORE[g] || 0; }
-
-function renderKPIs(rows) {
-  const n = rows.length;
-  const wins   = rows.filter(r => r.result === 'Win').length;
-  const draws  = rows.filter(r => r.result === 'Draw').length;
-  const losses = rows.filter(r => r.result === 'Loss').length;
-  const ipScores  = rows.map(r => gradeScore(r.ip_grade)).filter(x => x > 0);
-  const oopScores = rows.map(r => gradeScore(r.oop_grade)).filter(x => x > 0);
-  const ipAvg  = ipScores.length  ? (ipScores.reduce((a,b)=>a+b,0)/ipScores.length).toFixed(2)   : '—';
-  const oopAvg = oopScores.length ? (oopScores.reduce((a,b)=>a+b,0)/oopScores.length).toFixed(2) : '—';
-
-  document.getElementById('kpiMatches').textContent = n;
-  document.getElementById('kpiWins').textContent    = wins;
-  document.getElementById('kpiRecord').textContent  = `W${wins} D${draws} L${losses}`;
-  document.getElementById('kpiIP').textContent      = ipAvg;
-  document.getElementById('kpiOOP').textContent     = oopAvg;
-
-  const teams = [...new Set(rows.map(r => r.team).filter(Boolean))];
-  document.getElementById('pageSub').textContent =
-    `${teams.join(', ') || '—'} · Updated ${new Date().toLocaleTimeString()}`;
-  document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
-}
-
-function renderMatchTable(rows) {
-  const recent = [...rows].sort((a,b) => new Date(b.submitted_at) - new Date(a.submitted_at)).slice(0, 10);
-  document.getElementById('matchCount').textContent = `${recent.length} most recent`;
-  if (!recent.length) {
-    document.getElementById('matchTableWrap').innerHTML = '<div class="empty">No matches yet.</div>';
-    return;
-  }
-  const html = `<table class="tbl">
-    <thead><tr>
-      <th>Date</th><th>Opposition</th><th>Score</th><th>Result</th>
-      <th>In Poss</th><th>Out of Poss</th>
-    </tr></thead>
-    <tbody>
-    ${recent.map(r => `<tr>
-      <td>${r.match_date || '—'}</td>
-      <td><strong>${r.opposition || '—'}</strong><br><small style="color:var(--muted)">${r.team||''} · ${r.venue||''}</small></td>
-      <td style="font-family:var(--f-head);font-size:18px">${r.score_us ?? '?'}–${r.score_them ?? '?'}</td>
-      <td>${resultBadge(r.result)}</td>
-      <td>${gradePill(r.ip_grade)}</td>
-      <td>${gradePill(r.oop_grade)}</td>
-    </tr>`).join('')}
-    </tbody>
-  </table>`;
-  document.getElementById('matchTableWrap').innerHTML = html;
-}
-
-function renderPlayerIndex(rows) {
-  const players = {};
-  const slots = ['p1','p2','p3','p4','p5'];
-  rows.forEach(row => {
-    slots.forEach(p => {
-      const name = row[`${p}_name`];
-      if (!name) return;
-      if (!players[name]) players[name] = { name, pos: row[`${p}_pos`], scores: [] };
-      const s = gradeScore(row[`${p}_grade`]);
-      if (s > 0) players[name].scores.push(s);
-    });
-  });
-  const ranked = Object.values(players)
-    .map(p => ({ ...p, avg: avg(p.scores) }))
-    .sort((a, b) => parseFloat(b.avg||0) - parseFloat(a.avg||0))
-    .slice(0, 10);
-
-  if (!ranked.length) {
-    document.getElementById('playerList').innerHTML = '<div class="empty">No player data yet.</div>';
-    return;
-  }
-  document.getElementById('playerList').innerHTML = ranked.map(p => `
-    <div class="player-row">
-      <div class="player-avatar">${p.name.charAt(0)}</div>
-      <div style="flex:1">
-        <div class="player-name">${p.name}</div>
-        <div class="player-pos">${p.pos || '—'} · ${p.scores.length} app${p.scores.length!==1?'s':''}</div>
-      </div>
-      <div class="player-avg">${p.avg || '—'}</div>
-      ${statusTag(p.avg)}
-    </div>
-  `).join('');
-}
-
-function renderFullTable(rows) {
-  const sorted = [...rows].sort((a,b) => new Date(b.submitted_at) - new Date(a.submitted_at));
-  document.getElementById('allCount').textContent = `${sorted.length} total`;
-  if (!sorted.length) {
-    document.getElementById('fullTableWrap').innerHTML = '<div class="empty">No data yet. Submit the first match report!</div>';
-    return;
-  }
-  document.getElementById('fullTableWrap').innerHTML = `<table class="tbl">
-    <thead><tr>
-      <th>Date</th><th>Team</th><th>Opposition</th><th>Venue</th>
-      <th>Score</th><th>Result</th><th>In Poss</th><th>Out of Poss</th>
-      <th>P1 Grade</th><th>P2 Grade</th><th>P3 Grade</th><th>Action Point</th>
-    </tr></thead>
-    <tbody>
-    ${sorted.map(r => `<tr>
-      <td>${r.match_date||'—'}</td>
-      <td>${r.team||'—'}</td>
-      <td><strong>${r.opposition||'—'}</strong></td>
-      <td>${r.venue||'—'}</td>
-      <td style="font-family:var(--f-head);font-size:18px">${r.score_us??'?'}–${r.score_them??'?'}</td>
-      <td>${resultBadge(r.result)}</td>
-      <td>${gradePill(r.ip_grade)}</td>
-      <td>${gradePill(r.oop_grade)}</td>
-      <td>${r.p1_name ? `${r.p1_name}<br>${gradePill(r.p1_grade)}` : '—'}</td>
-      <td>${r.p2_name ? `${r.p2_name}<br>${gradePill(r.p2_grade)}` : '—'}</td>
-      <td>${r.p3_name ? `${r.p3_name}<br>${gradePill(r.p3_grade)}` : '—'}</td>
-      <td style="font-size:12px;max-width:200px">${r.action_point||'—'}</td>
-    </tr>`).join('')}
-    </tbody>
-  </table>`;
-}
-
-function renderAll(rows) {
-  allRows = rows;
-  renderKPIs(rows);
-  renderMatchTable(rows);
-  renderPlayerIndex(rows);
-  renderFullTable(rows);
-}
-
-async function loadData() {
-  const { data, error } = await sb
-    .from('match_reports')
-    .select('*')
-    .order('submitted_at', { ascending: false });
-  if (error) {
-    console.error(error);
-    document.getElementById('pageSub').textContent = 'Error loading data: ' + error.message;
-    return;
-  }
-  renderAll(data);
-}
-
-function subscribeRealTime() {
-  sb.channel('match-reports-channel')
-    .on('postgres_changes', {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'match_reports',
-    }, payload => {
-      const newRow = payload.new;
-      allRows = [newRow, ...allRows];
-      renderAll(allRows);
-      // Flash the top row in the full table
-      const firstRow = document.querySelector('#fullTableWrap table tbody tr');
-      if (firstRow) firstRow.classList.add('new-row');
-      // Notification in title bar
-      document.title = '🟢 NEW REPORT · Al Jazira Dashboard';
-      setTimeout(() => { document.title = 'Al Jazira · Live Dashboard'; }, 4000);
-    })
-    .subscribe();
-}
-
-loadData().then(() => subscribeRealTime());
+document.getElementById('hdrLogo').src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="%230E1B3D"/><text x="50" y="64" font-family="Arial" font-weight="bold" font-size="38" fill="%23C9A028" text-anchor="middle">AJ</text></svg>');
+let ALL=[],FILTERED=[];
+function parseGrade(s){if(!s)return{band:null,value:null};const m=String(s).match(/([a-zA-Z]+)\s*\((\d+)\/10\)/);if(m)return{band:m[1].toLowerCase(),value:parseInt(m[2])};const e={'🔵':'outstanding','🟢':'good','🟡':'needswork','🔴':'poor'};for(const k in e){if(String(s).includes(k))return{band:e[k],value:{outstanding:9,good:7,needswork:5,poor:2}[e[k]]};}return{band:null,value:null};}
+function parseMeta(action){const map={};if(!action)return map;const idx=action.indexOf('PLAYER META:');if(idx<0)return map;action.slice(idx+12).split(';').forEach(ch=>{const m=ch.match(/(.+?)\[(.*?)\]/);if(m){const name=m[1].trim(),inner=m[2];map[name]={category:(inner.match(/cat:(\w+)/)||[])[1]||null,status:(inner.match(/\b(squad|loan|academy|trialist)\b/)||[])[1]||null,minutes:(inner.match(/(\d+)min/)||[])[1]||null};}});return map;}
+function parseActions(action){if(!action)return{ind:'',team:''};const ind=(action.match(/INDIVIDUAL:\s*([\s\S]*?)\s*\|\s*TEAM:/)||[])[1]||'';let team=(action.match(/TEAM:\s*([\s\S]*?)(\s*\|\||$)/)||[])[1]||'';return{ind:ind.trim(),team:team.trim()};}
+const bandToColor={outstanding:'blue',good:'green',needswork:'amber',poor:'red'};
+function gradePillClass(b){return{outstanding:'gp-blue',good:'gp-green',needswork:'gp-amber',poor:'gp-red'}[b]||'gp-grey';}
+function bandLabel(b){return{outstanding:'Outstanding',good:'Good',needswork:'Need Work',poor:'Poor'}[b]||'—';}
+function weekendAnchor(dateStr){const d=new Date(dateStr+'T00:00:00');const dow=d.getDay();const offset=(dow+2)%7;d.setDate(d.getDate()-offset);return d.toISOString().slice(0,10);}
+let MATCHDAYS=[];
+function buildMatchdays(rows){const anchors=[...new Set(rows.map(r=>weekendAnchor(r.match_date)))].sort();MATCHDAYS=anchors.map((a,i)=>{const end=new Date(a+'T00:00:00');end.setDate(end.getDate()+2);const fmt=s=>new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short'});return{anchor:a,num:i+1,label:`MD${i+1} · ${fmt(a)}–${fmt(end.toISOString().slice(0,10))}`};});}
+function matchdayOf(row){const a=weekendAnchor(row.match_date);return MATCHDAYS.find(m=>m.anchor===a);}
+async function load(){const{data,error}=await sb.from('match_reports').select('*').eq('approved',true).order('match_date',{ascending:false});if(error){document.getElementById('matchList').innerHTML=`<div class="empty-state"><div class="big">Couldn't load data</div><div>${error.message}</div></div>`;return;}ALL=data||[];buildMatchdays(ALL);populateFilters();applyFilters();}
+function populateFilters(){const ages=[...new Set(ALL.map(r=>r.team).filter(Boolean))].sort();const comps=[...new Set(ALL.map(r=>r.competition).filter(Boolean))].sort();document.getElementById('filterAge').innerHTML='<option value="">All Ages</option>'+ages.map(a=>`<option>${a}</option>`).join('');document.getElementById('filterComp').innerHTML='<option value="">All Competitions</option>'+comps.map(c=>`<option>${c}</option>`).join('');document.getElementById('filterMatchday').innerHTML='<option value="">All Matchdays</option>'+[...MATCHDAYS].reverse().map(m=>`<option value="${m.anchor}">${m.label}</option>`).join('');}
+function resetFilters(){document.getElementById('filterAge').value='';document.getElementById('filterMatchday').value='';document.getElementById('filterComp').value='';applyFilters();}
+function applyFilters(){const age=document.getElementById('filterAge').value,md=document.getElementById('filterMatchday').value,comp=document.getElementById('filterComp').value;FILTERED=ALL.filter(r=>{if(age&&r.team!==age)return false;if(comp&&r.competition!==comp)return false;if(md&&weekendAnchor(r.match_date)!==md)return false;return true;});document.getElementById('filterCount').textContent=`${FILTERED.length} match${FILTERED.length!==1?'es':''}`;renderOverview();renderAnalysis();}
+function esc(s){return String(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):'';}
+function renderOverview(){const wrap=document.getElementById('matchList');if(!FILTERED.length){wrap.innerHTML=`<div class="empty-state"><div class="big">No matches</div><div>Adjust the filters, or approve submissions in the admin page.</div></div>`;return;}wrap.innerHTML=FILTERED.map(r=>{const ip=parseGrade(r.ip_grade),oop=parseGrade(r.oop_grade);const meta=parseMeta(r.action_point),act=parseActions(r.action_point);const md=matchdayOf(r);const ours=[1,2,3,4,5].map(n=>{const name=r['p'+n+'_name'];if(!name)return null;const g=parseGrade(r['p'+n+'_grade']);const m=meta[name]||{};return{slot:n,name,pos:r['p'+n+'_pos'],grade:g,cat:m.category,mins:m.minutes,status:m.status};}).filter(Boolean);const opps=[1,2,3].map(n=>{const num=r['op'+n+'_num'],name=r['op'+n+'_name'];if(!num&&!name)return null;return{slot:n,num,name,grade:parseGrade(r['op'+n+'_grade'])};}).filter(Boolean);return `<div class="match-card"><div class="mc-head"><div class="mc-result ${r.result||''}">${(r.result||'?').slice(0,1)}</div><div class="mc-fixture"><div class="mc-teams"><span class="gold">Al Jazira ${r.team||''}</span> vs ${esc(r.opposition)||'—'}</div><div class="mc-meta">${r.match_date||'—'} · ${md?md.label.split(' · ')[0]:'—'} · ${r.competition||'—'} · ${r.venue||'—'} · Coach: ${esc(r.coach)||'—'}</div></div><div class="mc-score">${r.score_us??'?'}–${r.score_them??'?'}</div></div><div class="mc-body"><div class="mc-grid"><div class="phase-box"><div class="phase-title">In Possession <span class="grade-pill ${gradePillClass(ip.band)}">${bandLabel(ip.band)}${ip.value?' · '+ip.value+'/10':''}</span></div><div class="phase-notes">${r.ip_notes?esc(r.ip_notes):'<span class="empty">No notes</span>'}</div></div><div class="phase-box"><div class="phase-title">Out of Possession <span class="grade-pill ${gradePillClass(oop.band)}">${bandLabel(oop.band)}${oop.value?' · '+oop.value+'/10':''}</span></div><div class="phase-notes">${r.oop_notes?esc(r.oop_notes):'<span class="empty">No notes</span>'}</div></div></div>${(act.ind||act.team)?`<div class="action-box"><div class="action-label">Individual Action Point</div><div class="action-text">${esc(act.ind)||'—'}</div></div><div class="action-box"><div class="action-label">Team Action Point</div><div class="action-text">${esc(act.team)||'—'}</div></div>`:''}${ours.length?`<div class="ptable-wrap"><div class="ptable-title">Our Players</div><table class="ptable"><thead><tr><th></th><th>Name</th><th>Pos</th><th>Mins</th><th>Status</th><th>Category</th><th>Performance</th></tr></thead><tbody>${ours.map(p=>`<tr><td>${p.slot<=3?'<span class="star-badge">★</span>':''}</td><td><strong>${esc(p.name)}</strong></td><td>${p.pos||'—'}</td><td>${p.mins||'—'}</td><td>${p.status?cap(p.status):'—'}</td><td>${p.cat?`<span class="cat-dot cd-${p.cat}"></span>${cap(p.cat)}`:'—'}</td><td><span class="grade-pill ${gradePillClass(p.grade.band)}">${bandLabel(p.grade.band)}${p.grade.value?' · '+p.grade.value+'/10':''}</span></td></tr>`).join('')}</tbody></table></div>`:''}${opps.length?`<div class="ptable-wrap"><div class="ptable-title">Opposition Threats</div><table class="ptable"><thead><tr><th>#</th><th>Name</th><th>Threat Grade</th></tr></thead><tbody>${opps.map(o=>`<tr><td><strong>${o.num||'—'}</strong></td><td>${o.name?esc(o.name):'Unknown'}</td><td><span class="grade-pill ${gradePillClass(o.grade.band)}">${bandLabel(o.grade.band)}${o.grade.value?' · '+o.grade.value+'/10':''}</span></td></tr>`).join('')}</tbody></table></div>`:''}${r.opp_style?`<div style="margin-top:12px"><div class="ptable-title">Opposition Style</div><div class="phase-notes">${esc(r.opp_style)}</div></div>`:''}</div></div>`;}).join('');}
+let chartIP,chartOOP,chartStars;
+function renderAnalysis(){const avg=a=>a.length?(a.reduce((x,y)=>x+y,0)/a.length):0;const ipVals=FILTERED.map(r=>parseGrade(r.ip_grade).value).filter(v=>v);const oopVals=FILTERED.map(r=>parseGrade(r.oop_grade).value).filter(v=>v);const wins=FILTERED.filter(r=>r.result==='Win').length;document.getElementById('analysisKpis').innerHTML=`<div class="kpi"><div class="kpi-val">${FILTERED.length}</div><div class="kpi-label">Matches</div></div><div class="kpi green"><div class="kpi-val">${wins}</div><div class="kpi-label">Wins</div></div><div class="kpi gold"><div class="kpi-val">${avg(ipVals).toFixed(1)}</div><div class="kpi-label">Avg In Possession</div></div><div class="kpi red"><div class="kpi-val">${avg(oopVals).toFixed(1)}</div><div class="kpi-label">Avg Out of Possession</div></div>`;const seasonIP=avg(ALL.map(r=>parseGrade(r.ip_grade).value).filter(v=>v));const seasonOOP=avg(ALL.map(r=>parseGrade(r.oop_grade).value).filter(v=>v));const ages=[...new Set(FILTERED.map(r=>r.team).filter(Boolean))].sort();const ipByAge=ages.map(a=>avg(FILTERED.filter(r=>r.team===a).map(r=>parseGrade(r.ip_grade).value).filter(v=>v)));const oopByAge=ages.map(a=>avg(FILTERED.filter(r=>r.team===a).map(r=>parseGrade(r.oop_grade).value).filter(v=>v)));drawPhaseChart('chartIP',ages,ipByAge,avg(ipVals),seasonIP,'#1F6FB5');drawPhaseChart('chartOOP',ages,oopByAge,avg(oopVals),seasonOOP,'#2A8C4C');renderStarChart();renderPlayerIndex();}
+function drawPhaseChart(id,labels,data,mdAvg,seasonAvg,color){const ctx=document.getElementById(id);const ex=id==='chartIP'?chartIP:chartOOP;if(ex)ex.destroy();const c=new Chart(ctx,{type:'bar',data:{labels:labels.length?labels:['No data'],datasets:[{label:'Age group avg',data:data.length?data:[0],backgroundColor:color,borderRadius:6,barThickness:36,order:3},{label:'Matchday avg',type:'line',data:(labels.length?labels:['x']).map(()=>mdAvg),borderColor:'#C9A028',borderWidth:2,borderDash:[6,4],pointRadius:0,order:1},{label:'Season avg',type:'line',data:(labels.length?labels:['x']).map(()=>seasonAvg),borderColor:'#CC1230',borderWidth:2,pointRadius:0,order:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:10,ticks:{stepSize:2},title:{display:true,text:'Grade /10'}}},plugins:{legend:{position:'bottom',labels:{font:{family:'Archivo',size:11},usePointStyle:true}}}}});if(id==='chartIP')chartIP=c;else chartOOP=c;}
+function activeForPlayers(){const age=document.getElementById('filterAge').value,comp=document.getElementById('filterComp').value;return ALL.filter(r=>(!age||r.team===age)&&(!comp||r.competition===comp));}
+function collectPlayers(){const rows=activeForPlayers();const players={};rows.forEach(r=>{const meta=parseMeta(r.action_point);[1,2,3,4,5].forEach(n=>{const name=r['p'+n+'_name'];if(!name)return;const g=parseGrade(r['p'+n+'_grade']);const m=meta[name]||{};if(!players[name])players[name]={name,star:0,notable:0,grades:[],catMatch:0,catTotal:0,cats:{}};const P=players[name];if(n<=3)P.star++;else P.notable++;if(g.value)P.grades.push(g.value);if(m.category&&g.band){P.catTotal++;if(bandToColor[g.band]===m.category)P.catMatch++;P.cats[m.category]=(P.cats[m.category]||0)+1;}});});return players;}
+function renderStarChart(){const players=collectPlayers();const ranked=Object.values(players).sort((a,b)=>b.star-a.star).slice(0,8);if(chartStars)chartStars.destroy();chartStars=new Chart(document.getElementById('chartStars'),{type:'bar',data:{labels:ranked.length?ranked.map(p=>p.name):['No data'],datasets:[{label:'Star selections',data:ranked.length?ranked.map(p=>p.star):[0],backgroundColor:'#C9A028',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{stepSize:1},title:{display:true,text:'Times voted Star Player'}}},plugins:{legend:{display:false}}}});}
+function renderPlayerIndex(){const players=collectPlayers();const avg=a=>a.length?(a.reduce((x,y)=>x+y,0)/a.length):0;const ranked=Object.values(players).map(p=>({...p,avgGrade:avg(p.grades),matchRate:p.catTotal?(p.catMatch/p.catTotal*100):null})).sort((a,b)=>b.avgGrade-a.avgGrade);const tbl=document.getElementById('playerIndexTable');if(!ranked.length){tbl.innerHTML='<tbody><tr><td style="padding:20px;color:var(--muted)">No player data yet.</td></tr></tbody>';return;}tbl.innerHTML=`<thead><tr><th>Player</th><th>Apps</th><th>★ Star</th><th>Avg Grade</th><th>Top Category</th><th>Grade ↔ Category Match</th></tr></thead><tbody>${ranked.map(p=>{const apps=p.star+p.notable;const topCat=Object.entries(p.cats).sort((a,b)=>b[1]-a[1])[0];return `<tr><td><strong>${esc(p.name)}</strong></td><td>${apps}</td><td>${p.star}</td><td><strong>${p.avgGrade.toFixed(1)}</strong>/10</td><td>${topCat?`<span class="cat-dot cd-${topCat[0]}"></span>${cap(topCat[0])}`:'—'}</td><td>${p.matchRate===null?'—':`${p.matchRate.toFixed(0)}% <span style="color:var(--muted)">(${p.catMatch}/${p.catTotal})</span>`}</td></tr>`;}).join('')}</tbody>`;}
+function switchTab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+t).classList.add('active');if(t==='analysis')renderAnalysis();}
+function subscribe(){sb.channel('dash').on('postgres_changes',{event:'*',schema:'public',table:'match_reports'},()=>load()).subscribe();}
+load().then(subscribe);
 </script>
-
 </body>
 </html>
