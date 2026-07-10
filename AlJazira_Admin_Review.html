@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al Jazira FC · Admin Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://qjajdlylypjhoykvvytp.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqYWpkbHlseXBqaG95a3Z2eXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NjQ0MDYsImV4cCI6MjA5NjE0MDQwNn0.8QinawJr97HiauxY7a4SxnOsOt3XxRsQwLMpxqA6gdo';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+<style>
+:root{
+  --navy:#0E1B3D;--navy2:#1A2F5A;--gold:#C9A028;--red:#CC1230;
+  --white:#FFFFFF;--paper:#F0F3F8;--mist:#EEF1F8;--ink:#080E22;
+  --muted:#6B7A96;--rule:#D4DAE8;--green:#2A8C4C;--green-lt:#D3EBD9;
+  --amber:#C97A10;--amber-lt:#F8E6CF;--danger:#C9302C;--danger-lt:#F4D3D3;
+  --fh:'Bebas Neue',sans-serif;--fb:'Archivo',sans-serif;--r:10px;--rl:16px;
+  --sh:0 2px 12px rgba(14,27,61,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:var(--paper);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;background:none}
+input,select,textarea{font:inherit;color:inherit}
+.topbar{background:var(--navy);padding:14px 28px;display:flex;align-items:center;gap:14px;position:relative}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
+.brand-logo{width:46px;height:46px;border-radius:50%;background:var(--white);padding:2px;object-fit:contain}
+.brand-name{font-family:var(--fh);font-size:24px;color:var(--white);letter-spacing:1.5px;line-height:.95}
+.brand-name .gold{color:var(--gold)}
+.brand-tagline{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:3px;font-style:italic}
+.report-tag{display:inline-block;margin-top:6px;background:var(--red);color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:4px}
+.warn{background:var(--amber-lt);border-bottom:1px solid var(--amber);padding:10px 28px;font-size:12px;color:#7a4d08;font-weight:600}
+.page{max-width:1100px;margin:0 auto;padding:24px 28px 60px}
+.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.seg{display:flex;background:var(--white);border:1.5px solid var(--rule);border-radius:8px;overflow:hidden}
+.seg button{padding:9px 16px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.seg button.active{background:var(--navy);color:var(--gold)}
+.count{font-size:13px;color:var(--muted);font-weight:600;margin-left:auto}
+.sub-row{background:var(--white);border:1px solid var(--rule);border-radius:var(--rl);margin-bottom:14px;overflow:hidden;box-shadow:var(--sh)}
+.sub-head{padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;cursor:pointer}
+.sub-head:hover{background:#FAFBFE}
+.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sd-approved{background:var(--green)}.sd-pending{background:var(--amber)}
+.sub-title{font-family:var(--fh);font-size:18px;color:var(--navy);letter-spacing:.5px;flex:1;min-width:160px}
+.sub-meta{font-size:12px;color:var(--muted)}
+.badge{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.b-approved{background:var(--green-lt);color:var(--green)}
+.b-pending{background:var(--amber-lt);color:var(--amber)}
+.sub-actions{display:flex;gap:8px}
+.btn{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;transition:all .15s}
+.btn-approve{background:var(--green);color:#fff}
+.btn-unapprove{background:var(--amber);color:#fff}
+.btn-edit{background:var(--navy);color:var(--gold)}
+.btn-del{background:var(--white);color:var(--danger);border:1.5px solid var(--danger)}
+.btn-save{background:var(--green);color:#fff}
+.btn-cancel{background:var(--white);color:var(--navy);border:1.5px solid var(--rule)}
+.edit-body{display:none;padding:18px;border-top:1px solid var(--rule);background:var(--mist)}
+.edit-body.open{display:block}
+.eg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:640px){.eg{grid-template-columns:1fr}}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.fld input,.fld select,.fld textarea{padding:10px 12px;border:1.5px solid var(--rule);border-radius:8px;font-size:14px;background:#fff}
+.fld textarea{min-height:70px;resize:vertical}
+.sec-label{font-family:var(--fh);font-size:15px;color:var(--red);letter-spacing:1px;margin:16px 0 8px}
+.save-row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.loading,.empty{text-align:center;padding:50px;color:var(--muted)}
+.empty .big{font-family:var(--fh);font-size:26px;color:var(--navy);margin-bottom:6px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 24px;border-radius:10px;font-weight:600;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transition:opacity .3s;z-index:100}
+.toast.show{opacity:1}
+.toast.err{background:var(--danger)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <img class="brand-logo" id="hdrLogo" alt="Al Jazira FC">
+  <div>
+    <div class="brand-name">AL JAZIRA <span class="gold">FOOTBALL CLUB</span></div>
+    <div class="brand-tagline">Pride of Abu Dhabi</div>
+    <span class="report-tag">Admin Review</span>
+  </div>
+</header>
+<div class="warn">⚠ Private page — keep this file to yourself. It can edit, approve, and delete match reports. Submissions only appear on the dashboard once approved here.</div>
+
+<div class="page">
+  <div class="toolbar">
+    <div class="seg">
+      <button class="active" data-f="all" onclick="setView('all')">All</button>
+      <button data-f="pending" onclick="setView('pending')">Pending</button>
+      <button data-f="approved" onclick="setView('approved')">Approved</button>
+    </div>
+    <span class="count" id="count">—</span>
+  </div>
+  <div id="list"><div class="loading">Loading submissions…</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+document.getElementById('hdrLogo').src='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="%230E1B3D"/><text x="50" y="64" font-family="Arial" font-weight="bold" font-size="38" fill="%23C9A028" text-anchor="middle">AJ</text></svg>');
+let ROWS=[], view='all';
+const POSITIONS=['','GK','RB','RCB','LCB','LB','RWB','LWB','DM','RCM','LCM','CM','RAM','CAM','LAM','RW','LW','RCF','LCF','ST'];
+
+function toast(msg,err){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',2500);}
+function esc(s){return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+async function load(){
+  const {data,error}=await sb.from('match_reports').select('*').order('submitted_at',{ascending:false});
+  if(error){document.getElementById('list').innerHTML=`<div class="empty"><div class="big">Load error</div><div>${error.message}</div><div style="margin-top:10px;font-size:12px">If this mentions "approved" — run the supabase_dashboard_upgrade.sql script first.</div></div>`;return;}
+  ROWS=data||[];render();
+}
+function setView(v){view=v;document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('active',b.dataset.f===v));render();}
+
+function render(){
+  let rows=ROWS;
+  if(view==='pending')rows=ROWS.filter(r=>!r.approved);
+  if(view==='approved')rows=ROWS.filter(r=>r.approved);
+  document.getElementById('count').textContent=`${rows.length} of ${ROWS.length}`;
+  const wrap=document.getElementById('list');
+  if(!rows.length){wrap.innerHTML=`<div class="empty"><div class="big">Nothing here</div><div>No submissions in this view.</div></div>`;return;}
+  wrap.innerHTML=rows.map(r=>`
+    <div class="sub-row" id="row_${r.id}">
+      <div class="sub-head" onclick="toggleEdit('${r.id}')">
+        <div class="status-dot ${r.approved?'sd-approved':'sd-pending'}"></div>
+        <div class="sub-title">Al Jazira ${r.team||''} vs ${esc(r.opposition)||'—'}</div>
+        <div class="sub-meta">${r.match_date||'—'} · ${r.competition||'—'} · ${r.score_us??'?'}–${r.score_them??'?'} · ${r.result||'—'}</div>
+        <span class="badge ${r.approved?'b-approved':'b-pending'}">${r.approved?'Approved':'Pending'}</span>
+        <div class="sub-actions" onclick="event.stopPropagation()">
+          ${r.approved
+            ? `<button class="btn btn-unapprove" onclick="setApproved('${r.id}',false)">Unapprove</button>`
+            : `<button class="btn btn-approve" onclick="setApproved('${r.id}',true)">Approve</button>`}
+          <button class="btn btn-edit" onclick="toggleEdit('${r.id}')">Edit</button>
+          <button class="btn btn-del" onclick="delRow('${r.id}')">Delete</button>
+        </div>
+      </div>
+      <div class="edit-body" id="edit_${r.id}"></div>
+    </div>`).join('');
+}
+
+function toggleEdit(id){
+  const box=document.getElementById('edit_'+id);
+  if(box.classList.contains('open')){box.classList.remove('open');box.innerHTML='';return;}
+  document.querySelectorAll('.edit-body.open').forEach(b=>{b.classList.remove('open');b.innerHTML='';});
+  const r=ROWS.find(x=>String(x.id)===String(id));
+  box.innerHTML=editForm(r);
+  box.classList.add('open');
+}
+
+function inp(id,label,val,type){return `<div class="fld"><label>${label}</label><input id="${id}" type="${type||'text'}" value="${esc(val)}"></div>`;}
+function ta(id,label,val){return `<div class="fld"><label>${label}</label><textarea id="${id}">${esc(val)}</textarea></div>`;}
+function sel(id,label,val,opts){return `<div class="fld"><label>${label}</label><select id="${id}">${opts.map(o=>`<option ${o===(val||'')?'selected':''}>${o}</option>`).join('')}</select></div>`;}
+
+function editForm(r){
+  return `
+    <div class="sec-label">Match Snapshot</div>
+    <div class="eg">
+      ${inp('e_match_date_'+r.id,'Date',r.match_date,'date')}
+      ${sel('e_team_'+r.id,'Age Group',r.team,['','U8','U9','U10','U11','U12','U13','U14','U15','U17','U19','U21','U23'])}
+      ${sel('e_competition_'+r.id,'Competition',r.competition,['','League','Cup','Friendly','Tournament'])}
+      ${inp('e_opposition_'+r.id,'Opposition',r.opposition)}
+      ${inp('e_coach_'+r.id,'Lead Coach',r.coach)}
+      ${sel('e_venue_'+r.id,'Venue',r.venue,['','Home','Away','Neutral'])}
+      ${inp('e_score_us_'+r.id,'Our Score',r.score_us,'number')}
+      ${inp('e_score_them_'+r.id,'Opp Score',r.score_them,'number')}
+      ${sel('e_result_'+r.id,'Result',r.result,['','Win','Draw','Loss'])}
+    </div>
+    <div class="sec-label">Phases</div>
+    <div class="eg">
+      ${inp('e_ip_grade_'+r.id,'In Poss Grade (e.g. good (7/10))',r.ip_grade)}
+      ${inp('e_oop_grade_'+r.id,'Out Poss Grade',r.oop_grade)}
+    </div>
+    ${ta('e_ip_notes_'+r.id,'In Poss Notes',r.ip_notes)}
+    ${ta('e_oop_notes_'+r.id,'Out Poss Notes',r.oop_notes)}
+    <div class="sec-label">Players (name · position · grade)</div>
+    ${[1,2,3,4,5].map(n=>`<div class="eg">
+      ${inp('e_p'+n+'_name_'+r.id,'P'+n+' Name',r['p'+n+'_name'])}
+      ${sel('e_p'+n+'_pos_'+r.id,'P'+n+' Pos',r['p'+n+'_pos'],POSITIONS)}
+      ${inp('e_p'+n+'_grade_'+r.id,'P'+n+' Grade',r['p'+n+'_grade'])}
+    </div>`).join('')}
+    <div class="sec-label">Opposition</div>
+    ${ta('e_opp_style_'+r.id,'Opposition Style',r.opp_style)}
+    ${[1,2,3].map(n=>`<div class="eg">
+      ${inp('e_op'+n+'_num_'+r.id,'Threat '+n+' #',r['op'+n+'_num'],'number')}
+      ${inp('e_op'+n+'_name_'+r.id,'Threat '+n+' Name',r['op'+n+'_name'])}
+      ${inp('e_op'+n+'_grade_'+r.id,'Threat '+n+' Grade',r['op'+n+'_grade'])}
+    </div>`).join('')}
+    <div class="sec-label">Action Points (raw)</div>
+    ${ta('e_action_point_'+r.id,'Action Point / Player Meta',r.action_point)}
+    <div class="save-row">
+      <button class="btn btn-cancel" onclick="toggleEdit('${r.id}')">Cancel</button>
+      <button class="btn btn-save" onclick="saveRow('${r.id}')">Save Changes</button>
+    </div>`;
+}
+
+function gv(id){const e=document.getElementById(id);return e?e.value:undefined;}
+function gn(id){const v=gv(id);return v===''||v===undefined?null:parseInt(v);}
+
+async function saveRow(id){
+  const f=k=>gv('e_'+k+'_'+id);
+  const upd={
+    match_date:f('match_date')||null, team:f('team')||null, competition:f('competition')||null,
+    opposition:f('opposition')||null, coach:f('coach')||null, venue:f('venue')||null,
+    score_us:gn('e_score_us_'+id), score_them:gn('e_score_them_'+id), result:f('result')||null,
+    ip_grade:f('ip_grade')||null, oop_grade:f('oop_grade')||null,
+    ip_notes:f('ip_notes')||null, oop_notes:f('oop_notes')||null,
+    opp_style:f('opp_style')||null, action_point:f('action_point')||null,
+  };
+  [1,2,3,4,5].forEach(n=>{upd['p'+n+'_name']=f('p'+n+'_name')||null;upd['p'+n+'_pos']=f('p'+n+'_pos')||null;upd['p'+n+'_grade']=f('p'+n+'_grade')||null;});
+  [1,2,3].forEach(n=>{upd['op'+n+'_num']=gn('e_op'+n+'_num_'+id);upd['op'+n+'_name']=f('op'+n+'_name')||null;upd['op'+n+'_grade']=f('op'+n+'_grade')||null;});
+  const {error}=await sb.from('match_reports').update(upd).eq('id',id);
+  if(error){toast('Save failed: '+error.message,true);return;}
+  toast('Saved ✓');await load();
+}
+async function setApproved(id,val){
+  const {error}=await sb.from('match_reports').update({approved:val}).eq('id',id);
+  if(error){toast('Update failed: '+error.message,true);return;}
+  toast(val?'Approved ✓ — now on dashboard':'Unapproved — hidden from dashboard');await load();
+}
+async function delRow(id){
+  if(!confirm('Delete this submission permanently? This cannot be undone.'))return;
+  const {error}=await sb.from('match_reports').delete().eq('id',id);
+  if(error){toast('Delete failed: '+error.message,true);return;}
+  toast('Deleted');await load();
+}
+load();
+</script>
+</body>
+</html>
